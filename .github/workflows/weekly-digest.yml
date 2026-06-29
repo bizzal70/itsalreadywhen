@@ -1,0 +1,53 @@
+name: Weekly Digest
+
+on:
+  schedule:
+    - cron: '0 14 * * 0'  # 8 AM MDT (UTC-6) every Sunday
+  workflow_dispatch:
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: scraper/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r scraper/requirements.txt
+
+      - name: Restore database
+        uses: actions/cache@v4
+        with:
+          path: scraper/articles.db
+          restore-keys: articles-db-
+
+      - name: Run scraper (catch up any missed articles)
+        run: python scraper/scraper.py
+
+      - name: Generate digest
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GIT_AUTHOR_NAME: itsalreadywhen-bot
+          GIT_AUTHOR_EMAIL: actions@github.com
+          GIT_COMMITTER_NAME: itsalreadywhen-bot
+          GIT_COMMITTER_EMAIL: actions@github.com
+        run: python scraper/digest.py
+
+      - name: Push new post
+        run: |
+          git config user.name "itsalreadywhen-bot"
+          git config user.email "actions@github.com"
+          git add _posts/
+          git diff --staged --quiet || git commit -m "Weekly digest $(date +'%Y-%m-%d')"
+          git push

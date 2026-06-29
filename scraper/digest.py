@@ -158,7 +158,8 @@ def main():
     mark_used(conn, urls)
     conn.close()
 
-    git_push(filepath)
+    if not os.environ.get("GITHUB_ACTIONS"):
+        git_push(filepath)
 
 
 if __name__ == "__main__":
