@@ -26,12 +26,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r scraper/requirements.txt
 
-      - name: Restore database
-        uses: actions/cache@v4
-        with:
-          path: scraper/articles.db
-          restore-keys: articles-db-
-
       - name: Run scraper (catch up any missed articles)
         run: python scraper/scraper.py
 
