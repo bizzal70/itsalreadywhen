@@ -158,11 +158,7 @@ def main():
     mark_used(conn, urls)
     conn.close()
 
-    push = input("\nPush to GitHub now? (y/n): ").strip().lower()
-    if push == "y":
-        git_push(filepath)
-    else:
-        print(f"Post saved locally at {filepath}. Run 'git push' when ready.")
+    git_push(filepath)
 
 
 if __name__ == "__main__":
