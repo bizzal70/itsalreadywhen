@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 680 680">
+  <circle cx="340" cy="340" r="340" fill="#0d0d0d"/>
+  <circle cx="340" cy="340" r="300" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+  <circle cx="340" cy="220" r="90" fill="none" stroke="#c0392b" stroke-width="6"/>
+  <line x1="340" y1="180" x2="340" y2="240" stroke="#c0392b" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="340" cy="268" r="7" fill="#c0392b"/>
+  <line x1="100" y1="340" x2="580" y2="340" stroke="#1e1e1e" stroke-width="1.5"/>
+  <text x="340" y="410" font-family="monospace" font-size="38" font-weight="700" fill="#c0392b" text-anchor="middle" letter-spacing="-1">it's already</text>
+  <text x="340" y="460" font-family="monospace" font-size="38" font-weight="700" fill="#c0392b" text-anchor="middle" letter-spacing="-1">when.</text>
+  <text x="340" y="540" font-family="monospace" font-size="18" font-weight="700" fill="#333" text-anchor="middle" letter-spacing="4">CYBERSECURITY</text>
+  <circle cx="340" cy="340" r="338" fill="none" stroke="#1a1a1a" stroke-width="4"/>
+</svg>

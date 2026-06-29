@@ -1,0 +1,50 @@
+2026-06-29 | Bleeping Computer         | WhatsApp rolls out usernames to help users hide their phone number
+2026-06-29 | Bleeping Computer         | Microsoft extends Windows Server 2022 hotpatching until October 2027
+2026-06-29 | The Hacker News           | WhatsApp is Finally Getting Usernames to Help Keep Phone Numbers Private
+2026-06-29 | Schneier on Security      | Factoring RSA Keys with Many Zeros
+2026-06-29 | SecurityWeek              | WhatsApp Rolling Out Username Feature to Bolster Phone Number Privacy
+2026-06-29 | Bleeping Computer         | U.S. offers $10 million for hackers targeting WhatsApp, Signal users
+2026-06-29 | The Hacker News           | Mustang Panda Uses Zoho WorkDrive as Command Channel in Indian Government Attack
+2026-06-29 | Malwarebytes Labs         | This pay gap is programmed (Lock and Code S07E13)
+2026-06-29 | Malwarebytes Labs         | 119 Edge extensions promised useful tools, instead downloaded malware
+2026-06-29 | The Hacker News           | ⚡ Weekly Recap: Linux Kernel Flaws, AI Malware Tricks, Turla Backdoor, Infosteal
+2026-06-29 | SecurityWeek              | Researchers Demo New Claude Code Attack Using Harmless-Looking Repositories to H
+2026-06-29 | SecurityWeek              | Straiker Raises $64 Million for AI Security Platform
+2026-06-29 | Bleeping Computer         | Agentic AI Has an Identity Problem and Attackers Know It
+2026-06-29 | Bleeping Computer         | Critical SimpleHelp flaw exploited to deploy new stealer malware
+2026-06-29 | Bleeping Computer         | Hackers now exploit critical Oracle E-Business flaw in attacks
+2026-06-29 | SecurityWeek              | Insurance Regulators Group NAIC Hit in Oracle PeopleSoft Hack
+2026-06-29 | Bleeping Computer         | Webinar: Why business email compromise attacks keep succeeding
+2026-06-29 | The Hacker News           | 236,000 DCloud Uni-App Sites Used in Crypto Scams, Phishing, and Wallet Drainers
+2026-06-29 | Dark Reading              | Amazon Q VS Extension Flaw Leads to Cloud Credential Theft
+2026-06-29 | The Hacker News           | Why Post-Quantum Cryptography Starts With Credentials
+2026-06-29 | The Hacker News           | Gamaredon Expands Ukraine Attacks with New Malware and Cloud Service Abuse
+2026-06-29 | Bleeping Computer         | US seizes hundreds of FIFA World Cup illegal streaming domains
+2026-06-29 | SecurityWeek              | ‘DirtyClone’ Linux Kernel Vulnerability Leads to Root Access
+2026-06-29 | Schneier on Security      | Robot Police Officers
+2026-06-29 | SecurityWeek              | OpenAI and Anthropic Limit New AI Models to Trump-Approved Customers During Cybe
+2026-06-29 | SecurityWeek              | US Offers $10 Million Bounty for Russian State Hackers as Messaging App Attacks 
+2026-06-29 | The Hacker News           | Microsoft Removes 119 Edge Extensions That Hid Malware in Images and Fonts
+2026-06-29 | SecurityWeek              | OpenAI Unveils GPT-5.6 Sol as Its Most Advanced Cybersecurity AI
+2026-06-29 | The Hacker News           | Public PoC Released for Critical libssh2 CVE-2026-55200 Client-Side SSH Flaw
+2026-06-29 | Malwarebytes Labs         | A week in security (June 22 &#8211; June 28)
+2026-06-29 | The Hacker News           | Hijacked npm and Go Packages Use VS Code Tasks to Deploy Python Infostealer
+2026-06-28 | Bleeping Computer         | Data breach exposes up to 14.2 million email logins at six ISPs
+2026-06-27 | The Hacker News           | Ukraine Says Russian Intelligence Used Fake Support Texts to Steal Messaging Cre
+2026-06-27 | Bleeping Computer         | Clean GitHub repo tricks AI coding agents into running malware
+2026-06-27 | The Hacker News           | OpenAI Previews GPT-5.6 Sol With Restricted Access and Stronger Cyber Safeguards
+2026-06-27 | SecurityWeek              | Chinese Framework Powers 200,000 Scam Sites
+2026-06-27 | Dark Reading              | Third-Party Breaches Teach Education Sector a Costly Lesson in Vendor Risk
+2026-06-26 | Bleeping Computer         | FBI: Russian hackers now target Signal backup recovery keys
+2026-06-26 | Schneier on Security      | The Chinese Control the Majority of Argentina’s Squid Fleet
+2026-06-26 | Bleeping Computer         | CISA sets urgent deadline to fix Cisco flaw exploited in attacks
+2026-06-26 | The Hacker News           | FBI Warns Russian Intelligence Hackers Target Signal Backup Recovery Keys
+2026-06-26 | Dark Reading              | AI Decline? Confidence in Autonomous Penetration Testing Falls
+2026-06-26 | The Hacker News           | New SharkLoader Malware Deploys Cobalt Strike in StrikeShark Cyberattacks
+2026-06-26 | Bleeping Computer         | Polymarket customers lose $3 million in supply-chain attack
+2026-06-26 | Bleeping Computer         | Cybersecurity firms targeted by fraudulent OpenAI organization invites
+2026-06-26 | Dark Reading              | Cisco Adds NHI to Security Stack With Astrix, WideField Acquisitions
+2026-06-26 | Schneier on Security      | Meta Is Testing Facial Recognition for Police and Military
+2026-06-26 | Dark Reading              | New Initiative Tackles Security for End-of-Life Open Source Software
+2026-06-26 | The Hacker News           | Chinese-Speaking APT Deploys New TinyRCT Backdoor in Southeast Asia Campaign
+2026-06-26 | Dark Reading              | AI Won't Wipe-Out Entry-Level Cybersecurity Jobs
