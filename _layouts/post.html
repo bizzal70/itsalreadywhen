@@ -1,0 +1,17 @@
+---
+layout: default
+---
+<article>
+  <div class="post-header">
+    <div class="post-meta">
+      {{ page.date | date: "%B %d, %Y" }} &mdash; Issue #{{ page.issue | default: "—" }}
+    </div>
+    <h1>{{ page.title }}</h1>
+    {% if page.summary %}
+    <p style="color: var(--muted); font-size: 0.95rem; margin-top: 0.5rem;">{{ page.summary }}</p>
+    {% endif %}
+  </div>
+  <div class="post-content">
+    {{ content }}
+  </div>
+</article>

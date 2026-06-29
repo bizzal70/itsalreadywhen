@@ -1,0 +1,30 @@
+title: "It's Already When."
+tagline: "Cybersecurity news for people who know how this ends."
+description: "Weekly cybersecurity intelligence, plainly explained."
+url: "https://bizzal70.github.io"
+baseurl: "/itsalreadywhen"
+
+author:
+  name: "The Analyst"
+
+permalink: /:year/:month/:day/:title/
+
+markdown: kramdown
+highlighter: rouge
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+exclude:
+  - scraper/
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
