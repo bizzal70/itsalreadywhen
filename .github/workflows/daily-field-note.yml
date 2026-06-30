@@ -2,7 +2,8 @@ name: Daily Field Note
 
 on:
   schedule:
-    - cron: '30 12 * * *'  # 6:30 AM MDT (UTC-6), after the daily scrape
+    - cron: '0 14 * * *'  # 8:00 AM MDT (UTC-6, roughly Mar-Nov)
+    - cron: '0 15 * * *'  # 8:00 AM MST (UTC-7, roughly Nov-Mar)
   workflow_dispatch:
 
 jobs:
@@ -16,7 +17,24 @@ jobs:
         with:
           token: ${{ secrets.GH_PAT }}
 
+      - name: Gate on 8am MT (schedule only)
+        id: gate
+        run: |
+          mt_hour=$(TZ='America/Denver' date +%H)
+          mt_date=$(TZ='America/Denver' date +%Y-%m-%d)
+          echo "Current MT time: $(TZ='America/Denver' date)"
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$mt_hour" != "08" ]; then
+            echo "Not 8am MT yet (it's $mt_hour:00 MT) — skipping this cron tick."
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+          elif [ -f "_field_notes/${mt_date}-field-note.md" ]; then
+            echo "A Field Note for $mt_date already exists — skipping to avoid a duplicate publish."
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Setup Python
+        if: steps.gate.outputs.should_run == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -24,9 +42,11 @@ jobs:
           cache-dependency-path: scraper/requirements.txt
 
       - name: Install dependencies
+        if: steps.gate.outputs.should_run == 'true'
         run: pip install -r scraper/requirements.txt
 
       - name: Restore database
+        if: steps.gate.outputs.should_run == 'true'
         uses: actions/cache/restore@v4
         with:
           path: scraper/articles.db
@@ -34,12 +54,14 @@ jobs:
           restore-keys: articles-db-
 
       - name: Generate Field Note
+        if: steps.gate.outputs.should_run == 'true'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python scraper/field_note.py
 
       - name: Push new Field Note
         id: push
+        if: steps.gate.outputs.should_run == 'true'
         run: |
           git config user.name "itsalreadywhen-bot"
           git config user.email "actions@github.com"
@@ -47,7 +69,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "published=false" >> "$GITHUB_OUTPUT"
           else
-            git commit -m "Field Note $(date +'%Y-%m-%d')"
+            git commit -m "Field Note $(TZ='America/Denver' date +'%Y-%m-%d')"
             git push
             echo "published=true" >> "$GITHUB_OUTPUT"
           fi
