@@ -37,11 +37,11 @@ def parse_article(path):
 
 def build_tweet(title, summary, url):
     header = f"It's Already When. — RTFM: {title}"
-    tweet = f"{header}\n\n{summary}\n\n{url}\n\n#CyberSecurity #InfoSec"
+    tweet = f"{header}\n\n{summary}\n\n{url}\n\n#CyberSecurity #CISO"
     if len(tweet) > 280:
-        max_summary = 280 - len(f"{header}\n\n\n\n{url}\n\n#CyberSecurity #InfoSec") - 3
+        max_summary = 280 - len(f"{header}\n\n\n\n{url}\n\n#CyberSecurity #CISO") - 3
         summary = summary[:max_summary] + "..."
-        tweet = f"{header}\n\n{summary}\n\n{url}\n\n#CyberSecurity #InfoSec"
+        tweet = f"{header}\n\n{summary}\n\n{url}\n\n#CyberSecurity #CISO"
     return tweet
 
 

@@ -39,11 +39,11 @@ def parse_post(path):
 
 
 def build_tweet(issue_num, summary, url):
-    tweet = f"It's Already When. — Issue #{issue_num:03d}\n\n{summary}\n\n{url}\n\n#CyberSecurity #ThreatIntel #InfoSec"
+    tweet = f"It's Already When. — Issue #{issue_num:03d}\n\n{summary}\n\n{url}\n\n#CyberSecurity #ThreatIntel"
     if len(tweet) > 280:
-        max_summary = 280 - len(f"It's Already When. — Issue #{issue_num:03d}\n\n\n\n{url}\n\n#CyberSecurity #ThreatIntel #InfoSec") - 3
+        max_summary = 280 - len(f"It's Already When. — Issue #{issue_num:03d}\n\n\n\n{url}\n\n#CyberSecurity #ThreatIntel") - 3
         summary = summary[:max_summary] + "..."
-        tweet = f"It's Already When. — Issue #{issue_num:03d}\n\n{summary}\n\n{url}\n\n#CyberSecurity #ThreatIntel #InfoSec"
+        tweet = f"It's Already When. — Issue #{issue_num:03d}\n\n{summary}\n\n{url}\n\n#CyberSecurity #ThreatIntel"
     return tweet
 
 

@@ -35,11 +35,11 @@ def parse_note(path):
 
 def build_tweet(summary, url):
     header = "It's Already When. — Field Note"
-    tweet = f"{header}\n\n{summary}\n\n{url}\n\n#CyberSecurity #ThreatIntel"
+    tweet = f"{header}\n\n{summary}\n\n{url}\n\n#CyberSecurity #BlueTeam"
     if len(tweet) > 280:
-        max_summary = 280 - len(f"{header}\n\n\n\n{url}\n\n#CyberSecurity #ThreatIntel") - 3
+        max_summary = 280 - len(f"{header}\n\n\n\n{url}\n\n#CyberSecurity #BlueTeam") - 3
         summary = summary[:max_summary] + "..."
-        tweet = f"{header}\n\n{summary}\n\n{url}\n\n#CyberSecurity #ThreatIntel"
+        tweet = f"{header}\n\n{summary}\n\n{url}\n\n#CyberSecurity #BlueTeam"
     return tweet
 
 
