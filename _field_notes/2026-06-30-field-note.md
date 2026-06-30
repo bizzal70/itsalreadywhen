@@ -17,10 +17,10 @@ Three things worth your attention, all already in motion. Attackers are exploiti
 
 ## Resources
 
-Verified links for the CVEs mentioned above — patch advisories and detection rules, not opinions.
+Verified links for the CVEs mentioned above — official advisories, and a live search for public detection rules if any exist yet.
 
-- **CVE-2026-46817** — [NVD advisory](https://nvd.nist.gov/vuln/detail/CVE-2026-46817) · [Sigma detection rules](https://github.com/SigmaHQ/sigma/search?q=CVE-2026-46817)
-- **CVE-2026-48558** — [NVD advisory](https://nvd.nist.gov/vuln/detail/CVE-2026-48558) · [Sigma detection rules](https://github.com/SigmaHQ/sigma/search?q=CVE-2026-48558)
-- **CVE-2026-55200** — [NVD advisory](https://nvd.nist.gov/vuln/detail/CVE-2026-55200) · [Sigma detection rules](https://github.com/SigmaHQ/sigma/search?q=CVE-2026-55200)
+- **CVE-2026-46817** — [NVD advisory](https://nvd.nist.gov/vuln/detail/CVE-2026-46817) · [Search Sigma for detection rules](https://github.com/SigmaHQ/sigma/search?q=CVE-2026-46817)
+- **CVE-2026-48558** — [NVD advisory](https://nvd.nist.gov/vuln/detail/CVE-2026-48558) · [Search Sigma for detection rules](https://github.com/SigmaHQ/sigma/search?q=CVE-2026-48558)
+- **CVE-2026-55200** — [NVD advisory](https://nvd.nist.gov/vuln/detail/CVE-2026-55200) · [Search Sigma for detection rules](https://github.com/SigmaHQ/sigma/search?q=CVE-2026-55200)
 
 *It's already when. Patch like it.*
