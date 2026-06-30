@@ -2,18 +2,18 @@
 layout: field_note
 title: "Field Note — June 30, 2026"
 date: 2026-06-30
-summary: "Active exploitation hits SimpleHelp (CVE-2026-48558) and Oracle EBS (CVE-2026-46817), while a public PoC drops for the libssh2 client flaw CVE-2026-55200."
+summary: "Three actively exploited critical flaws hit at once: SimpleHexlp CVE-2026-48558, Oracle EBS CVE-2026-46817, and Windows Defender 'BlueHammer,' all with confirmed in-the-wild abuse."
 ---
 
 ## Today's Field Note
-Three things worth your attention, all already in motion. Attackers are exploiting CVE-2026-48558 in SimpleHelp to drop Djinn Stealer, a cross-platform infostealer hitting Windows, macOS, and Linux. RMM tools remain a favorite because compromising one gets you everyone downstream. Separately, Oracle E-Business Suite's CVE-2026-46817 is now under active attack per Defused, the kind of financial-app flaw that doesn't stay quiet. And a public PoC just landed for CVE-2026-55200, a critical libssh2 client-side memory corruption bug (CVSS 9.2) where a malicious *server* can pop your *client* with no credentials and no interaction. Every release through 1.11.1 is affected, which is a lot of embedded surface area.
+Three maximum-pain flaws are live at once, and none of them are theoretical. CVE-2026-48558, a CVSS 10.0 OIDC auth bypass in SimpleHelp, is being used to drop two fresh stealers (Djinn and TaskWeaver) that hunt SSH keys, crypto wallets, cloud, and AI credentials. In parallel, Oracle E-Business Suite's Payments module is under active attack via CVE-2026-46817 (CVSS 9.8), an unauthenticated takeover that Defused has already observed in the wild. And CISA confirmed ransomware crews are now exploiting the Windows Defender privilege-escalation bug dubbed BlueHammer, previously a zero-day. Remote management tooling, ERP financials, and your endpoint defense layer: pick your patch order, but pick fast.
 
 ## Today's Action
-- Patch SimpleHelp immediately and hunt for Djinn Stealer indicators; review RMM logs for unexpected sessions and downstream deployments since disclosure.
-- Apply Oracle's fix for CVE-2026-46817 on all EBS financial instances; if you can't patch today, restrict external access and watch for anomalous EBS activity.
-- Inventory everything linking libssh2 ≤1.11.1, including embedded and vendored copies, and prioritize updates for any client that connects to untrusted SSH endpoints.
-- Treat outbound SSH from build agents, scanners, and automation as the new risk vector for CVE-2026-55200, not just inbound.
-- Pull the SimpleHelp and Oracle CVEs into your emergency change queue; both have moved from disclosure to exploitation faster than a normal patch cycle tolerates.
+- Patch SimpleHelp now for CVE-2026-48558, then rotate every SSH key, API token, and credential any SimpleHelp host could reach. Assume the OIDC bypass means existing sessions are burned.
+- Apply Oracle's fix for CVE-2026-46817 on E-Business Suite, and if Payments was internet-facing, hunt for unauthorized transactions and new admin accounts.
+- Confirm the Windows Defender BlueHammer patch is deployed fleet-wide; CISA-confirmed ransomware use means privilege escalation is the post-foothold step, not the entry.
+- Hunt for Djinn and TaskWeaver indicators: outbound traffic to unknown C2, access to wallet files, `.ssh` directories, and cloud/AI credential stores.
+- Cross-check whether your SimpleHelp or EBS instances should be reachable from the internet at all. If yes, fix that too.
 
 ## Resources
 
@@ -21,6 +21,5 @@ Verified links for the CVEs mentioned above: official advisories, and a live sea
 
 - **CVE-2026-46817**: [NVD advisory](https://nvd.nist.gov/vuln/detail/CVE-2026-46817) · [Search Sigma for detection rules](https://github.com/SigmaHQ/sigma/search?q=CVE-2026-46817)
 - **CVE-2026-48558**: [NVD advisory](https://nvd.nist.gov/vuln/detail/CVE-2026-48558) · [Search Sigma for detection rules](https://github.com/SigmaHQ/sigma/search?q=CVE-2026-48558)
-- **CVE-2026-55200**: [NVD advisory](https://nvd.nist.gov/vuln/detail/CVE-2026-55200) · [Search Sigma for detection rules](https://github.com/SigmaHQ/sigma/search?q=CVE-2026-55200)
 
-*It's already when. Patch like it.*
+*Three tens and a ransomware crew before lunch. Patch in priority order, not in panic.*
