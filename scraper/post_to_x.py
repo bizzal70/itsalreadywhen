@@ -24,7 +24,7 @@ def get_latest_post():
 
 def parse_post(path):
     content = path.read_text(encoding="utf-8")
-    issue = re.search(r"issue:\s*(\d+)", content)
+    issue = re.search(r'issue:\s*"?(\d+)"?', content)
     summary = re.search(r'summary:\s*"(.+)"', content)
     date = re.search(r"date:\s*(\d{4}-\d{2}-\d{2})", content)
 
@@ -32,7 +32,7 @@ def parse_post(path):
     summary_text = summary.group(1) if summary else ""
     post_date = date.group(1) if date else ""
 
-    slug = path.stem
+    slug = re.sub(r"^\d{4}-\d{2}-\d{2}-", "", path.stem)
     url = f"{BLOG_URL}/{post_date.replace('-', '/')}/{slug}/" if post_date else BLOG_URL
 
     return issue_num, summary_text, url
