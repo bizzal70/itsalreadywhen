@@ -10,6 +10,7 @@ import os
 import sqlite3
 import subprocess
 from datetime import datetime, timezone, timedelta
+from zoneinfo import ZoneInfo
 from pathlib import Path
 import anthropic
 from resources import build_resources_section, insert_before_signoff
@@ -17,6 +18,7 @@ from scraper import init_db
 
 DB_PATH = Path(__file__).parent / "articles.db"
 NOTES_DIR = Path(__file__).parent.parent / "_field_notes"
+MT = ZoneInfo("America/Denver")
 
 
 def get_todays_articles(conn):
@@ -75,7 +77,7 @@ TODAY'S ARTICLES:
 
 
 def write_note(title, summary, content):
-    today = datetime.now().strftime("%Y-%m-%d")
+    today = datetime.now(MT).strftime("%Y-%m-%d")
     slug = "field-note"
     filename = NOTES_DIR / f"{today}-{slug}.md"
 
@@ -149,7 +151,7 @@ def main():
 
     content = insert_before_signoff(content, build_resources_section(content, heading="## Resources"))
 
-    today_fmt = datetime.now().strftime("%B %d, %Y")
+    today_fmt = datetime.now(MT).strftime("%B %d, %Y")
     title = f"Field Note — {today_fmt}"
 
     filepath = write_note(title, summary, content)
