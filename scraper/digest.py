@@ -89,12 +89,13 @@ def write_post(issue_number, title, summary, content):
     slug = f"issue-{issue_number:03d}"
     filename = POSTS_DIR / f"{today}-{slug}.md"
 
+    safe_summary = summary.replace('"', "'")
     frontmatter = f"""---
 layout: post
 title: "Issue #{issue_number:03d} — {title}"
 date: {today}
 issue: "{issue_number}"
-summary: "{summary}"
+summary: "{safe_summary}"
 ---
 
 """
