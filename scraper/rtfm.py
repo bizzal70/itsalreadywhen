@@ -48,7 +48,7 @@ Topic: {topic['topic']}
 Grounding framework: {topic['framework']}
 Angle: {topic['angle']}
 
-Write the article in Markdown with this structure:
+Write the article in Markdown with this structure. Do NOT include a top-level title or heading (no "# ..." line) — the page template already renders the title separately. Start directly with the opening paragraph.
 1. Open with a sharp, opinionated framing of the problem (2-4 sentences) — why this "obvious" thing is still ignored in practice
 2. ## The Standard — explain what the framework/control actually requires, in plain language, citing it by name
 3. ## Where It Breaks Down — the specific, concrete ways organizations fail to implement this in practice (be technical and specific, not generic)
@@ -131,6 +131,11 @@ def main():
         else:
             content_lines.append(line)
     content = "\n".join(content_lines).strip()
+
+    # Safety net: strip a leading H1 if the model adds one despite instructions,
+    # since the page template already renders the title.
+    if content.startswith("# "):
+        content = content.split("\n", 1)[1].lstrip() if "\n" in content else ""
 
     filepath = write_post(topic, summary, content)
 

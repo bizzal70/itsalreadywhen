@@ -7,8 +7,6 @@ framework: "NIST SP 800-63B (Digital Identity Guidelines)"
 framework_url: "https://pages.nist.gov/800-63-3/sp800-63b.html"
 ---
 
-# It's Already When.
-
 We bolted push notifications onto authentication because passwords were a disaster and SMS one-time codes were worse, and for a brief, hopeful moment it looked like we'd solved something. Then attackers discovered that a button which says *Approve* will, given enough requests at 3 a.m., eventually get pressed. The control we deployed to stop credential theft became a control that launders credential theft into account takeover, one weary thumb at a time. This is not a failure of the technology so much as a failure to read the manual that shipped with it.
 
 ## The Standard
