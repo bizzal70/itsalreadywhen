@@ -14,11 +14,11 @@ def build_resources_section(content, heading="## Resources"):
     if not cves:
         return ""
 
-    lines = [f"{heading}\n", "Verified links for the CVEs mentioned above — patch advisories and detection rules, not opinions.\n"]
+    lines = [f"{heading}\n", "Verified links for the CVEs mentioned above — official advisories, and a live search for public detection rules if any exist yet.\n"]
     for cve in cves:
         nvd_url = f"https://nvd.nist.gov/vuln/detail/{cve}"
         sigma_url = f"https://github.com/SigmaHQ/sigma/search?q={cve}"
-        lines.append(f"- **{cve}** — [NVD advisory]({nvd_url}) · [Sigma detection rules]({sigma_url})")
+        lines.append(f"- **{cve}** — [NVD advisory]({nvd_url}) · [Search Sigma for detection rules]({sigma_url})")
 
     return "\n".join(lines) + "\n"
 
