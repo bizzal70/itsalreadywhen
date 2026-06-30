@@ -93,7 +93,7 @@ def write_post(issue_number, title, summary, content):
 layout: post
 title: "Issue #{issue_number:03d} — {title}"
 date: {today}
-issue: {issue_number}
+issue: "{issue_number}"
 summary: "{summary}"
 ---
 
