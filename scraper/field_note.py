@@ -13,6 +13,7 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 import anthropic
 from resources import build_resources_section, insert_before_signoff
+from scraper import init_db
 
 DB_PATH = Path(__file__).parent / "articles.db"
 NOTES_DIR = Path(__file__).parent.parent / "_field_notes"
@@ -109,6 +110,7 @@ def main():
         raise SystemExit("ERROR: Set the ANTHROPIC_API_KEY environment variable.")
 
     conn = sqlite3.connect(DB_PATH)
+    init_db(conn)
     articles = get_todays_articles(conn)
 
     if not articles:
