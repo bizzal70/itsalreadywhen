@@ -1,0 +1,23 @@
+---
+layout: default
+---
+<article>
+  <div class="post-header">
+    <div class="post-meta">
+      {{ page.date | date: "%B %d, %Y" }} &mdash; RTFM
+    </div>
+    <h1>{{ page.title }}</h1>
+    {% if page.summary %}
+    <p style="color: var(--muted); font-size: 0.95rem; margin-top: 0.5rem;">{{ page.summary }}</p>
+    {% endif %}
+    {% if page.framework %}
+    <p style="margin-top: 0.75rem;">
+      <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent2); text-transform: uppercase; letter-spacing: 0.05em;">Grounded in:</span>
+      {% if page.framework_url %}<a href="{{ page.framework_url }}" style="font-size: 0.85rem;">{{ page.framework }}</a>{% else %}<span style="font-size: 0.85rem; color: var(--muted);">{{ page.framework }}</span>{% endif %}
+    </p>
+    {% endif %}
+  </div>
+  <div class="post-content">
+    {{ content }}
+  </div>
+</article>

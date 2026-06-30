@@ -1,0 +1,40 @@
+name: Weekly RTFM
+
+on:
+  schedule:
+    - cron: '0 14 * * 3'  # 8 AM MDT (UTC-6) every Wednesday
+  workflow_dispatch:
+
+jobs:
+  rtfm:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: scraper/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r scraper/requirements.txt
+
+      - name: Generate RTFM article
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python scraper/rtfm.py
+
+      - name: Push new RTFM article
+        run: |
+          git config user.name "itsalreadywhen-bot"
+          git config user.email "actions@github.com"
+          git add _rtfm/ scraper/rtfm_topics.yml
+          git diff --staged --quiet || git commit -m "RTFM $(date +'%Y-%m-%d')"
+          git push

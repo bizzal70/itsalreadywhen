@@ -1,0 +1,22 @@
+---
+layout: default
+title: "RTFM"
+permalink: /rtfm/
+---
+<p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Long-form. Technical. Every Wednesday. The things you already know you should be doing.</p>
+<p style="margin-bottom: 2rem;"><a href="{{ '/rtfm-feed.xml' | relative_url }}" style="font-family: var(--font-mono); font-size: 0.8rem;">Subscribe via RSS &rarr;</a></p>
+<ul class="post-list">
+  {% assign articles = site.rtfm | sort: 'date' | reverse %}
+  {% for article in articles %}
+  <li>
+    <div class="post-meta">{{ article.date | date: "%B %d, %Y" }} &mdash; RTFM</div>
+    <div class="post-title"><a href="{{ article.url | relative_url }}">{{ article.title }}</a></div>
+    {% if article.summary %}<div class="post-excerpt">{{ article.summary }}</div>{% endif %}
+  </li>
+  {% endfor %}
+  {% if articles.size == 0 %}
+  <li style="padding: 3rem 0; color: var(--muted); font-family: var(--font-mono); font-size: 0.85rem;">
+    // first RTFM incoming.
+  </li>
+  {% endif %}
+</ul>

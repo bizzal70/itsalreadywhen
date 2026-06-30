@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
   {% feed_meta %}
   <link type="application/atom+xml" rel="alternate" href="{{ '/field-notes-feed.xml' | absolute_url }}" title="{{ site.title | smartify }} — Field Notes" />
+  <link type="application/atom+xml" rel="alternate" href="{{ '/rtfm-feed.xml' | absolute_url }}" title="{{ site.title | smartify }} — RTFM" />
   {% seo %}
 </head>
 <body>
@@ -18,6 +19,7 @@
       <nav>
         <a href="{{ '/' | relative_url }}">Issues</a>
         <a href="{{ '/field-notes/' | relative_url }}">Field Notes</a>
+        <a href="{{ '/rtfm/' | relative_url }}">RTFM</a>
         <a href="{{ '/about' | relative_url }}">About</a>
         <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
       </nav>

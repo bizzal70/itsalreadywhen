@@ -20,6 +20,9 @@ collections:
   field_notes:
     output: true
     permalink: /field-notes/:year/:month/:day/:title/
+  rtfm:
+    output: true
+    permalink: /rtfm/:year/:month/:day/:title/
 
 exclude:
   - scraper/
@@ -38,3 +41,8 @@ defaults:
       type: "field_notes"
     values:
       layout: "field_note"
+  - scope:
+      path: ""
+      type: "rtfm"
+    values:
+      layout: "rtfm"
