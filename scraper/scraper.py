@@ -25,10 +25,16 @@ def init_db(conn):
             summary TEXT,
             published_at TEXT NOT NULL,
             fetched_at TEXT NOT NULL,
-            used_in_digest INTEGER DEFAULT 0
+            used_in_digest INTEGER DEFAULT 0,
+            used_in_fieldnote INTEGER DEFAULT 0
         )
     """)
     conn.commit()
+    # Backfill for DBs created before this column existed
+    cols = [row[1] for row in conn.execute("PRAGMA table_info(articles)")]
+    if "used_in_fieldnote" not in cols:
+        conn.execute("ALTER TABLE articles ADD COLUMN used_in_fieldnote INTEGER DEFAULT 0")
+        conn.commit()
 
 
 def article_id(url):

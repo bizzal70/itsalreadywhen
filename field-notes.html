@@ -1,0 +1,21 @@
+---
+layout: default
+title: "Field Notes"
+permalink: /field-notes/
+---
+<p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem;">Short, tactical, daily. The weekly Issues are the verdict — these are the notes scrawled in between.</p>
+<ul class="post-list">
+  {% assign notes = site.field_notes | sort: 'date' | reverse %}
+  {% for note in notes %}
+  <li>
+    <div class="post-meta">{{ note.date | date: "%B %d, %Y" }} &mdash; Field Note</div>
+    <div class="post-title"><a href="{{ note.url | relative_url }}">{{ note.title }}</a></div>
+    {% if note.summary %}<div class="post-excerpt">{{ note.summary }}</div>{% endif %}
+  </li>
+  {% endfor %}
+  {% if notes.size == 0 %}
+  <li style="padding: 3rem 0; color: var(--muted); font-family: var(--font-mono); font-size: 0.85rem;">
+    // first field note incoming.
+  </li>
+  {% endif %}
+</ul>

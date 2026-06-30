@@ -8,14 +8,12 @@ Requires: ANTHROPIC_API_KEY environment variable
 """
 
 import os
-import re
 import sqlite3
 import subprocess
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 import anthropic
-
-CVE_PATTERN = re.compile(r"CVE-\d{4}-\d{4,7}")
+from resources import build_resources_section, insert_before_signoff
 
 DB_PATH = Path(__file__).parent / "articles.db"
 POSTS_DIR = Path(__file__).parent.parent / "_posts"
@@ -87,24 +85,6 @@ ARTICLES THIS WEEK:
 """
 
 
-def build_resources_section(content):
-    """Builds a verified-links section from CVE IDs found in the digest text.
-    Links are constructed programmatically (not LLM-generated) to avoid hallucinated URLs.
-    NVD entries are authoritative; SigmaHQ search surfaces community detection rules if any exist.
-    """
-    cves = sorted(set(CVE_PATTERN.findall(content)))
-    if not cves:
-        return ""
-
-    lines = ["## Resources\n", "Verified links for the CVEs mentioned above — patch advisories and detection rules, not opinions.\n"]
-    for cve in cves:
-        nvd_url = f"https://nvd.nist.gov/vuln/detail/{cve}"
-        sigma_url = f"https://github.com/SigmaHQ/sigma/search?q={cve}"
-        lines.append(f"- **{cve}** — [NVD advisory]({nvd_url}) · [Sigma detection rules]({sigma_url})")
-
-    return "\n".join(lines) + "\n"
-
-
 def write_post(issue_number, title, summary, content):
     today = datetime.now().strftime("%Y-%m-%d")
     slug = f"issue-{issue_number:03d}"
@@ -170,15 +150,7 @@ def main():
             content_lines.append(line)
     content = "\n".join(content_lines).strip()
 
-    resources = build_resources_section(content)
-    if resources:
-        # Insert before the final italicized sign-off line, if present
-        body_lines = content.splitlines()
-        if body_lines and body_lines[-1].strip().startswith("*") and body_lines[-1].strip().endswith("*"):
-            sign_off = body_lines.pop()
-            content = "\n".join(body_lines).rstrip() + "\n\n" + resources + "\n" + sign_off
-        else:
-            content = content + "\n\n" + resources
+    content = insert_before_signoff(content, build_resources_section(content))
 
     issue_number = get_issue_number()
     today_fmt = datetime.now().strftime("%B %d, %Y")

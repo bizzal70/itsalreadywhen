@@ -16,6 +16,11 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
 
+collections:
+  field_notes:
+    output: true
+    permalink: /field-notes/:year/:month/:day/:title/
+
 exclude:
   - scraper/
   - README.md
@@ -28,3 +33,8 @@ defaults:
       type: "posts"
     values:
       layout: "post"
+  - scope:
+      path: ""
+      type: "field_notes"
+    values:
+      layout: "field_note"
