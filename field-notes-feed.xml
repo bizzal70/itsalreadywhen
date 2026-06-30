@@ -1,0 +1,31 @@
+---
+layout: null
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <generator uri="https://jekyllrb.com/" version="{{ jekyll.version }}">Jekyll</generator>
+  <link href="{{ "/field-notes-feed.xml" | absolute_url }}" rel="self" type="application/atom+xml" />
+  <link href="{{ "/field-notes/" | absolute_url }}" rel="alternate" type="text/html" />
+  <updated>{{ site.time | date_to_xmlschema }}</updated>
+  <id>{{ "/field-notes-feed.xml" | absolute_url }}</id>
+  <title type="html">{{ site.title | smartify }} — Field Notes</title>
+  <subtitle>Short, tactical, daily cybersecurity field notes.</subtitle>
+  <author>
+    <name>{{ site.author.name }}</name>
+  </author>
+  {% assign notes = site.field_notes | sort: 'date' | reverse %}
+  {% for note in notes limit: 20 %}
+  <entry>
+    <title type="html">{{ note.title | smartify | xml_escape }}</title>
+    <link href="{{ note.url | absolute_url }}" rel="alternate" type="text/html" title="{{ note.title | smartify | xml_escape }}" />
+    <published>{{ note.date | date_to_xmlschema }}</published>
+    <updated>{{ note.date | date_to_xmlschema }}</updated>
+    <id>{{ note.url | absolute_url }}</id>
+    <content type="html" xml:base="{{ note.url | absolute_url }}">{{ note.content | xml_escape }}</content>
+    {% if note.summary %}<summary type="html">{{ note.summary | xml_escape }}</summary>{% endif %}
+    <author>
+      <name>{{ site.author.name }}</name>
+    </author>
+  </entry>
+  {% endfor %}
+</feed>
