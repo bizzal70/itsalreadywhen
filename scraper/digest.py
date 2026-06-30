@@ -73,6 +73,7 @@ Rules:
 - No bullet-point soup. Mix prose and lists naturally
 - Keep it under 1200 words
 - Do not mention that you used AI to write this
+- Do not use em dashes (—) anywhere in the text. Use periods, commas, or parentheses instead
 - End with a single italicized sign-off line that fits the brand voice
 
 Also provide, on the very first line before the post content, a one-sentence summary (for the blog index) prefixed with "SUMMARY:" — this will be stripped from the post.

@@ -59,6 +59,7 @@ Rules:
 - No fear-mongering, no vendor PR language
 - Keep the whole thing under 300 words
 - Do not mention that you used AI to write this
+- Do not use em dashes (—) anywhere in the text. Use periods, commas, or parentheses instead
 - End with a single italicized one-line sign-off that fits the brand voice
 
 Also provide, on the very first line before the content, a one-sentence summary (for the blog index) prefixed with "SUMMARY:" — this will be stripped from the post.
