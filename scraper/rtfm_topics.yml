@@ -8,7 +8,7 @@
   framework_url: https://www.cisecurity.org/controls/cis-controls-list
   angle: The gap between writing a least-privilege policy and an access review that
     does anything
-  used: false
+  used: true
 - topic: Patch Cadence vs. Patch Theater
   framework: CIS Critical Security Control 7 — Continuous Vulnerability Management
   framework_url: https://www.cisecurity.org/controls/cis-controls-list
