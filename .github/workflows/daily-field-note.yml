@@ -75,6 +75,32 @@ jobs:
             echo "published=true" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Wait for page to go live
+        if: steps.push.outputs.published == 'true'
+        run: |
+          URL=$(python -c "
+          import re, glob
+          from pathlib import Path
+          notes = sorted(glob.glob('_field_notes/*.md'), reverse=True)
+          p = Path(notes[0])
+          content = p.read_text()
+          date = re.search(r'date:\s*(\d{4}-\d{2}-\d{2})', content).group(1)
+          slug = re.sub(r'^\d{4}-\d{2}-\d{2}-', '', p.stem)
+          print(f'https://bizzal70.github.io/itsalreadywhen/field-notes/{date.replace(\"-\", \"/\")}/{slug}/')
+          ")
+          echo "Waiting for $URL"
+          for i in $(seq 1 30); do
+            status=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
+            if [ "$status" = "200" ]; then
+              echo "Page is live (attempt $i)"
+              exit 0
+            fi
+            echo "Attempt $i: got $status, waiting 10s..."
+            sleep 10
+          done
+          echo "Page did not go live after 5 minutes — aborting tweet"
+          exit 1
+
       - name: Post to X
         if: steps.push.outputs.published == 'true'
         env:
