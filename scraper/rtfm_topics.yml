@@ -13,7 +13,7 @@
   framework: CIS Critical Security Control 7 — Continuous Vulnerability Management
   framework_url: https://www.cisecurity.org/controls/cis-controls-list
   angle: Why 'we have a patching policy' and 'we patch' are different claims
-  used: false
+  used: true
 - topic: Logging Without Anyone Reading the Logs
   framework: CIS Critical Security Control 8 — Audit Log Management
   framework_url: https://www.cisecurity.org/controls/cis-controls-list
