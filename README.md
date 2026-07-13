@@ -2,115 +2,150 @@
 
 *Cybersecurity news for people who know how this ends.*
 
-A fully automated, self-publishing cybersecurity publication with three distinct sections, each on its own cadence. No manual steps required — it scrapes, writes, publishes, and announces itself.
+A fully automated, self-publishing cybersecurity publication. It scrapes, writes, publishes, and posts to X — no manual steps required.
 
-**Live site:** https://bizzal70.github.io/itsalreadywhen/
+**Live site:** https://bizzal70.github.io/itsalreadywhen  
 **X:** [@itsalreadywhen](https://x.com/itsalreadywhen)
 
-## Sections
+---
 
-| Section | Cadence | What it is | Sourcing |
-|---|---|---|---|
-| **Issues** | Weekly, Sunday | The long-form digest: breaches, vulnerabilities, threat actors, the week's verdict | This week's scraped articles |
-| **Field Notes** | Daily | Short, tactical entries on the highest-signal item(s) from the last 24 hours, with concrete actions | Last 24h of scraped articles |
-| **RTFM** | Weekly, Wednesday | Long-form, evergreen best-practice articles grounded in named industry standards (NIST, CIS, OWASP, MITRE) | A maintained topic backlog, deliberately *not* news-driven |
+## Three sections, three cadences
 
-Each section has its own index page, its own RSS feed, and its own X hashtag pairing (see below).
+| Section | Cadence | What it is |
+|---|---|---|
+| **Issues** | Weekly, Sunday 8am MT | Long-form digest: breaches, vulnerabilities, threat actors, the week's verdict |
+| **Field Notes** | Daily, 6:30am MT | Short tactical entries on the highest-signal item(s) from the last 24 hours |
+| **RTFM** | Weekly, Wednesday 8am MT | Evergreen best-practice articles grounded in NIST, CIS, OWASP, MITRE — not news-driven |
+
+Each section has its own index page, RSS feed, and X hashtag pairing.
+
+---
 
 ## How it works
 
 ```
-Daily (6 AM MDT)         Daily (6:30 AM MDT)        Weekly Sun (8 AM MDT)      Weekly Wed (8 AM MDT)
-─────────────────        ────────────────────       ──────────────────────    ──────────────────────
-13 RSS feeds              Last 24h of articles        This week's articles      Next unused topic
-      │                          │                           │                         │
-      ▼                          ▼                           ▼                         ▼
-scraper.py                 field_note.py                digest.py                  rtfm.py
-      │                          │                           │                         │
-      ▼                          ▼                           ▼                         ▼
-articles.db (SQLite,        _field_notes/ post           _posts/ post              _rtfm/ post
-cached between runs)              │                           │                         │
-                                   ▼                           ▼                         ▼
-                            GitHub Pages deploys ◄──────────────┴─────────────────────────┘
-                                   │
-                                   ▼
-                            Tweet posted to X (skipped quietly if nothing new published)
+6:00 AM MT daily          6:30 AM MT daily         Sunday 8 AM MT           Wednesday 8 AM MT
+─────────────────         ─────────────────         ──────────────           ─────────────────
+13 RSS feeds              Last 24h articles          Week's articles          Next unused topic
+      │                         │                         │                         │
+      ▼                         ▼                         ▼                         ▼
+  scraper.py              field_note.py              digest.py                  rtfm.py
+      │                         │                         │                         │
+      ▼                         ▼                         ▼                         ▼
+ articles.db              _field_notes/ post          _posts/ post             _rtfm/ post
+                                │                         │                         │
+                                └─────────────────────────┴─────────────────────────┘
+                                                          │
+                                                          ▼
+                                              deploy.yml → GitHub Pages
+                                                          │
+                                                          ▼
+                                          X card thumbnail generated (Pillow)
+                                                          │
+                                                          ▼
+                                                  Tweet posted to X
 ```
 
-Everything runs on GitHub Actions. No local machine, server, or scheduled task required.
+Everything runs on GitHub Actions. No local machine, server, or cron required.
 
-## Architecture
+---
 
-| Component | Purpose |
-|---|---|
-| `scraper/feeds.py` | List of 13 cybersecurity RSS sources (CISA, NVD, Krebs, Hacker News, Bleeping Computer, Dark Reading, SecurityWeek, Schneier, Recorded Future, Malwarebytes, Project Zero, US-CERT) |
-| `scraper/scraper.py` | Pulls feeds, deduplicates by URL hash, stores to `articles.db` |
-| `scraper/digest.py` | Feeds the week's unused articles to the Claude API, writes a weekly Issue, tracks issue numbers |
-| `scraper/field_note.py` | Feeds the last 24h of unused articles to the Claude API, writes a Field Note; skips quietly if nothing is high-signal |
-| `scraper/rtfm.py` | Picks the next unused topic from `rtfm_topics.yml`, writes a long-form RTFM article grounded only in the cited framework (no article-database lookup) |
-| `scraper/resources.py` | Shared helper: builds a "Resources" section with NVD + SigmaHQ links for any CVE IDs mentioned in generated text, built deterministically from the CVE ID (never LLM-generated, to avoid hallucinated links) |
-| `scraper/rtfm_topics.yml` | The RTFM topic backlog. Each entry cites a hand-verified, stable framework URL (NIST, CIS, OWASP, MITRE). Edit/add/reorder freely; entries are marked `used: true` after publishing |
-| `scraper/post_to_x.py` | Tweets the latest Issue |
-| `scraper/post_field_note_to_x.py` | Tweets the latest Field Note |
-| `scraper/post_rtfm_to_x.py` | Tweets the latest RTFM article |
-| `_layouts/`, `_posts/`, `_field_notes/`, `_rtfm/`, `assets/` | Standard Jekyll site, dark theme, GitHub Pages hosted, three Jekyll collections |
+## Workflows
 
-## Workflows (`.github/workflows/`)
-
-- **`daily-scrape.yml`** — every day, 6 AM MDT: collects articles, caches the database between runs
-- **`daily-field-note.yml`** — every day, 6:30 AM MDT: generates a Field Note (if anything is high-signal), pushes it, tweets it
-- **`weekly-digest.yml`** — every Sunday, 8 AM MDT: catches up any missed articles, generates the Issue with Claude, commits and pushes it, tweets the announcement
-- **`weekly-rtfm.yml`** — every Wednesday, 8 AM MDT: generates the next RTFM article, pushes it, tweets it
-- **`deploy.yml`** — builds and deploys the Jekyll site to GitHub Pages on every push to `main`
-- **`tweet-latest-rtfm.yml`** — manual-only: tweets the most recently published RTFM article without generating a new one (useful if a tweet step ships after an article already went out)
-- **`fix-tweet.yml`** — manual-only: reposts a corrected tweet for a given Issue number (input: issue number), useful if a tweet goes out with a bad link
-
-All scheduled workflows can also be triggered manually from the Actions tab (`workflow_dispatch`). Daily and weekly publish workflows guard against tweeting when nothing new was actually published that run.
-
-## X hashtags
-
-Each section uses a distinct two-tag pairing to reach different sub-communities rather than the same generic tags everywhere (X's algorithm also suppresses reach above ~3 tags per post):
-
-| Section | Tags | Why |
+| Workflow | Schedule | What it does |
 |---|---|---|
-| Issues | `#CyberSecurity #ThreatIntel` | Breach/threat-actor coverage |
-| Field Notes | `#CyberSecurity #BlueTeam` | Tactical content reaches defenders who act on it |
-| RTFM | `#CyberSecurity #CISO` | Standards/best-practice content reaches the leadership audience |
+| `daily-scrape.yml` | 6:00am MT daily | Pulls 13 RSS feeds, deduplicates by URL hash, caches to `articles.db` |
+| `daily-field-note.yml` | 6:30am MT daily | Generates a Field Note if anything is high-signal; pushes it; tweets with card |
+| `weekly-digest.yml` | Sunday 8am MT | Catches up missed articles; generates the Issue with Claude; pushes; tweets with card |
+| `weekly-rtfm.yml` | Wednesday 8am MT | Picks next RTFM topic; generates article; pushes; tweets |
+| `deploy.yml` | On every push to `main` | Builds + deploys Jekyll site to GitHub Pages |
+| `tweet-latest-rtfm.yml` | Manual | Tweets the most recent RTFM article (use if tweet step missed a publish) |
+| `fix-tweet.yml` | Manual | Reposts a corrected tweet for a given Issue number |
+
+All scheduled workflows support `workflow_dispatch` for manual runs. Publish workflows skip the tweet silently if nothing new was generated.
+
+---
+
+## Scraper components
+
+| File | Purpose |
+|---|---|
+| `scraper/feeds.py` | 13 RSS sources: CISA, NVD, Krebs, Hacker News, Bleeping Computer, Dark Reading, SecurityWeek, Schneier, Recorded Future, Malwarebytes, Project Zero, US-CERT |
+| `scraper/scraper.py` | Pulls feeds, deduplicates, stores to `articles.db` |
+| `scraper/digest.py` | Generates weekly Issue from this week's unused articles via Claude API |
+| `scraper/field_note.py` | Generates daily Field Note from last 24h of unused articles; skips if nothing high-signal |
+| `scraper/rtfm.py` | Picks next unused topic from `rtfm_topics.yml`; generates evergreen RTFM article |
+| `scraper/resources.py` | Builds deterministic NVD + SigmaHQ links for any CVE IDs in generated text — never LLM-generated URLs |
+| `scraper/rtfm_topics.yml` | RTFM topic backlog. Each entry cites a stable, hand-verified framework URL. Entries are marked `used: true` after publishing |
+| `scraper/x_thumbnail.py` | Generates 1200×675 X card image (Pillow) from post front matter: dark theme, red accent, blog name + issue + summary |
+| `scraper/post_to_x.py` | Tweets weekly Issue announcement with thumbnail card attached |
+| `scraper/post_field_note_to_x.py` | Tweets Field Note announcement |
+| `scraper/post_rtfm_to_x.py` | Tweets RTFM announcement |
+
+---
+
+## X strategy
+
+Each section uses a distinct two-tag pairing. X suppresses reach above ~3 tags per post, and different sub-communities follow each topic:
+
+| Section | Tags | Audience |
+|---|---|---|
+| Issues | `#CyberSecurity #ThreatIntel` | Threat intel and IR teams |
+| Field Notes | `#CyberSecurity #BlueTeam` | Defenders who act on tactical content |
+| RTFM | `#CyberSecurity #CISO` | Leadership and compliance audience |
+
+Every Issue tweet includes a generated 1200×675 card image: dark background, red accent, issue number and summary pulled from post front matter.
+
+---
+
+## Content rules
+
+- **No em dashes** — a deliberate choice to avoid an obvious AI-writing tell
+- **No AI disclosure** in post copy
+- **RTFM is not news-driven** — it cites only stable framework documents (NIST, CIS, OWASP, MITRE ATT&CK), never the scraped article DB
+- **CVE links are deterministic** — `resources.py` builds NVD + SigmaHQ URLs from the CVE ID directly; never hallucinated
+- **Articles are tracked separately** — `used_in_fieldnote` and `used_in_digest` columns prevent daily and weekly generators from competing for the same articles
+
+---
 
 ## Required secrets
 
-Set under repo Settings → Secrets and variables → Actions:
+Settings → Secrets and variables → Actions:
 
 | Secret | Purpose |
 |---|---|
 | `GH_PAT` | Personal access token with repo write access (used for committing posts) |
-| `ANTHROPIC_API_KEY` | Claude API key for content generation |
+| `ANTHROPIC_API_KEY` | Claude API for content generation |
 | `X_API_KEY` / `X_API_SECRET` | X app consumer keys (OAuth 1.0a) |
-| `X_ACCESS_TOKEN` / `X_ACCESS_TOKEN_SECRET` | X user access tokens, must be regenerated after any X app permission change |
+| `X_ACCESS_TOKEN` / `X_ACCESS_TOKEN_SECRET` | X user access tokens |
 
-## Local development
+---
 
-```bash
-cd scraper
-pip install -r requirements.txt
-python scraper.py           # pull latest articles
-python digest.py            # generate this week's Issue (requires ANTHROPIC_API_KEY)
-python field_note.py        # generate today's Field Note
-python rtfm.py               # generate the next RTFM article
+## Site structure
+
+```
+_posts/           Weekly Issues
+_field_notes/     Daily Field Notes
+_rtfm/            Evergreen RTFM articles
+_layouts/         Jekyll templates
+assets/           CSS, fonts, images
+scraper/          All automation scripts
+.github/workflows/ GitHub Actions workflows
 ```
 
-To preview the Jekyll site locally, install Ruby + Bundler and run `bundle exec jekyll serve` from the repo root.
+Issue numbers are tracked in `scraper/issue_number.txt` and incremented on each digest run.
 
-## Content rules baked into the generators
+---
 
-- No em dashes in generated prose (prompted explicitly, plus the `resources.py` template avoids them too) — a deliberate choice to avoid an obvious AI-writing tell
-- No mention that AI was used to write any post
-- RTFM is intentionally **not** sourced from the scraped article database. It cites only named, stable industry frameworks (NIST, CIS Controls, OWASP, MITRE ATT&CK) so it reads as a field manual, not a slow-news-week Issue
-- CVE references anywhere get a "Resources" section with deterministic NVD + SigmaHQ search links, never LLM-generated URLs
+## Adding an RTFM topic
 
-## Notes
+Open `scraper/rtfm_topics.yml` and add an entry:
 
-- Issue numbers are tracked in `scraper/issue_number.txt` and incremented on each digest run.
-- Post frontmatter fields (`issue`, `summary`) are sanitized before writing to avoid breaking YAML parsing, quotes in AI-generated summaries are converted to single quotes.
-- `digest.py`, `field_note.py`, and `rtfm.py` all skip their own git push step when running inside GitHub Actions (the workflow handles the commit/push itself).
-- `field_note.py` and `digest.py` track "used" articles separately (`used_in_fieldnote` vs `used_in_digest` columns) so the daily and weekly pulls never compete for the same articles.
+```yaml
+- title: "Your topic title"
+  framework: "NIST SP 800-53"
+  url: "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final"
+  used: false
+```
+
+The next Wednesday run picks the first unused entry in the list.
