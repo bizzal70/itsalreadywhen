@@ -24,7 +24,9 @@ jobs:
           cache-dependency-path: scraper/requirements.txt
 
       - name: Install dependencies
-        run: pip install -r scraper/requirements.txt
+        run: |
+          sudo apt-get install -y --no-install-recommends fonts-dejavu-core
+          pip install -r scraper/requirements.txt
 
       - name: Run scraper (catch up any missed articles)
         run: python scraper/scraper.py
