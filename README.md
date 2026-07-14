@@ -149,3 +149,7 @@ Open `scraper/rtfm_topics.yml` and add an entry:
 ```
 
 The next Wednesday run picks the first unused entry in the list.
+## License
+
+- **Code** (generators, workflows, templates, config): [MIT](LICENSE)
+- **Written content** (posts, articles, field notes): [CC BY-NC 4.0](LICENSE-CONTENT.md) — attribution required, non-commercial reuse only.
