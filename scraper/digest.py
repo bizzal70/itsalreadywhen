@@ -135,9 +135,20 @@ def main():
     client = anthropic.Anthropic(api_key=api_key)
     response = client.messages.create(
         model="claude-opus-4-8",
-        max_tokens=2000,
+        # A ~1200-word post across six sections plus a sign-off runs well past
+        # 2000 tokens; that cap silently truncated Issue #002 mid-sentence.
+        max_tokens=4000,
         messages=[{"role": "user", "content": build_prompt(articles)}]
     )
+
+    # Never publish a partial digest. If the model hit the token ceiling the
+    # post will be cut off mid-sentence, so fail loudly instead of shipping it.
+    if response.stop_reason == "max_tokens":
+        raise SystemExit(
+            "ERROR: Claude response hit the max_tokens limit; the digest is "
+            "truncated. Raise max_tokens and re-run. Refusing to publish a "
+            "partial post."
+        )
 
     raw = response.content[0].text.strip()
 
