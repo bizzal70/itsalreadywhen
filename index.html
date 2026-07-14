@@ -6,7 +6,7 @@ title: "All Issues"
 <ul class="post-list">
   {% for post in site.posts %}
   <li>
-    <div class="post-meta">{{ post.date | date: "%B %d, %Y" }}{% if post.issue %} &mdash; Issue #{{ post.issue }}{% endif %}</div>
+    <div class="post-meta">{{ post.date | date: "%B %d, %Y" }}{% if post.issue %} &mdash; Issue #{{ post.issue | prepend: "00" | slice: -3, 3 }}{% endif %}</div>
     <div class="post-title"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></div>
     {% if post.summary %}<div class="post-excerpt">{{ post.summary }}</div>{% endif %}
   </li>
