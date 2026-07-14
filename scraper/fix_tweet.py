@@ -5,18 +5,29 @@ Requires env vars: X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_TOKEN_SECRE
 """
 
 import os
+import re
 import sys
 import tweepy
 from pathlib import Path
 from post_to_x import parse_post, build_tweet, POSTS_DIR
 
+ISSUE_FRONTMATTER_RE = re.compile(r'^issue:\s*"?(\d+)"?\s*$', re.MULTILINE)
+
 
 def find_post_by_issue(issue_number):
-    target = f"issue-{issue_number:03d}"
+    # Match on the issue: frontmatter (the source of truth for the displayed
+    # number), falling back to the filename slug. A renumbered historical post
+    # can keep an old filename slug that no longer matches its frontmatter.
+    slug = f"issue-{issue_number:03d}"
+    fallback = None
     for post in POSTS_DIR.glob("*.md"):
-        if target in post.stem:
+        text = post.read_text(encoding="utf-8")
+        match = ISSUE_FRONTMATTER_RE.search(text)
+        if match and int(match.group(1)) == issue_number:
             return post
-    return None
+        if slug in post.stem:
+            fallback = post
+    return fallback
 
 
 def main():
@@ -26,7 +37,7 @@ def main():
         print(f"No post found for issue {issue_number}")
         return
 
-    issue_num, summary, url = parse_post(post_path)
+    issue_num, summary, post_date, url = parse_post(post_path)
     tweet = build_tweet(issue_num, summary, url)
 
     client = tweepy.Client(
