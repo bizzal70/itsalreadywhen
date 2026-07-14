@@ -88,7 +88,9 @@ Rules:
 - Do not use em dashes (—) anywhere in the text. Use periods, commas, or parentheses instead
 - End with a single italicized sign-off line that fits the brand voice
 
-Also provide, on the very first line before the post content, a one-sentence summary (for the blog index) prefixed with "SUMMARY:" — this will be stripped from the post.
+Also provide, before the post content, these two lines (both will be stripped from the post):
+- "HEADLINE: <a specific, curiosity-driving headline for this week's issue, 40 to 70 characters, no issue number, no date, no clickbait lies; lead with the week's single most interesting concrete thing>"
+- "SUMMARY: <one dry sentence for the blog index>"
 
 ---
 
@@ -98,22 +100,32 @@ ARTICLES THIS WEEK:
 """
 
 
-def write_post(issue_number, title, summary, content):
+def write_post(issue_number, headline, summary, content, week_label):
     today = datetime.now().strftime("%Y-%m-%d")
     slug = f"issue-{issue_number:03d}"
     filename = POSTS_DIR / f"{today}-{slug}.md"
 
     safe_summary = summary.replace('"', "'")
+    # Promote the hook (headline, else summary) into the title; the issue number
+    # and week move to a kicker line above the body. CTA lands after the sign-off.
+    hook = (headline or summary).strip().strip('"').rstrip(".")
+    title = (hook or f"Issue #{issue_number:03d} — {week_label}").replace('"', "'")
+    kicker = f"*Issue #{issue_number:03d} · {week_label}*"
+    cta = (
+        "\n\n---\n\n*New Issue every week. Follow "
+        "[@itsalreadywhen](https://x.com/itsalreadywhen) or subscribe via RSS "
+        "so the next patch list lands before your SOC needs it.*"
+    )
     frontmatter = f"""---
 layout: post
-title: "Issue #{issue_number:03d} — {title}"
+title: "{title}"
 date: {today}
 issue: "{issue_number}"
 summary: "{safe_summary}"
 ---
 
 """
-    filename.write_text(frontmatter + content, encoding="utf-8")
+    filename.write_text(frontmatter + kicker + "\n\n" + content + cta, encoding="utf-8")
     print(f"Post written: {filename}")
     return filename
 
@@ -164,11 +176,14 @@ def main():
 
     raw = response.content[0].text.strip()
 
-    # Extract summary line
+    # Extract headline + summary lines
+    headline = ""
     summary = ""
     content_lines = []
     for line in raw.splitlines():
-        if line.startswith("SUMMARY:"):
+        if line.startswith("HEADLINE:"):
+            headline = line.replace("HEADLINE:", "").strip()
+        elif line.startswith("SUMMARY:"):
             summary = line.replace("SUMMARY:", "").strip()
         else:
             content_lines.append(line)
@@ -178,9 +193,9 @@ def main():
 
     issue_number = get_issue_number()
     today_fmt = datetime.now().strftime("%B %d, %Y")
-    title = f"Week of {today_fmt}"
+    week_label = f"Week of {today_fmt}"
 
-    filepath = write_post(issue_number, title, summary, content)
+    filepath = write_post(issue_number, headline, summary, content, week_label)
 
     urls = [a[1] for a in articles]
     mark_used(conn, urls)
