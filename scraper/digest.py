@@ -8,6 +8,7 @@ Requires: ANTHROPIC_API_KEY environment variable
 """
 
 import os
+import re
 import sqlite3
 import subprocess
 from datetime import datetime, timezone, timedelta
@@ -17,16 +18,27 @@ from resources import build_resources_section, insert_before_signoff
 
 DB_PATH = Path(__file__).parent / "articles.db"
 POSTS_DIR = Path(__file__).parent.parent / "_posts"
-ISSUE_TRACKER = Path(__file__).parent / "issue_number.txt"
+
+ISSUE_FRONTMATTER_RE = re.compile(r'^issue:\s*"?(\d+)"?\s*$', re.MULTILINE)
 
 
 def get_issue_number():
-    if ISSUE_TRACKER.exists():
-        n = int(ISSUE_TRACKER.read_text().strip()) + 1
-    else:
-        n = 1
-    ISSUE_TRACKER.write_text(str(n))
-    return n
+    """Return the next issue number, derived from existing posts.
+
+    We scan the ``issue:`` frontmatter of every post in ``_posts`` and add one
+    to the highest we find. This replaces the old ``issue_number.txt`` counter,
+    which was never committed back by the CI workflow (it only staged
+    ``_posts/``), so every run re-read the same stale value and republished the
+    same number — that is how issues #002, #003, and #004 all shipped as "002".
+    Deriving from the posts themselves is self-healing and can't desync.
+    """
+    highest = -1
+    if POSTS_DIR.exists():
+        for post in POSTS_DIR.glob("*.md"):
+            match = ISSUE_FRONTMATTER_RE.search(post.read_text(encoding="utf-8"))
+            if match:
+                highest = max(highest, int(match.group(1)))
+    return highest + 1
 
 
 def get_weeks_articles(conn):
