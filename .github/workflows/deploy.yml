@@ -1,4 +1,4 @@
-name: Deploy Jekyll to GitHub Pages
+﻿name: Deploy Jekyll to GitHub Pages
 
 on:
   push:
@@ -23,6 +23,11 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
+      - name: Generate OG image
+        run: |
+          mkdir -p assets
+          convert -size 1200x630 xc:'#0d1117' -fill '#e05252' -draw "rectangle 0,580 1200,630" -font DejaVu-Sans-Bold -pointsize 80 -fill '#e05252' -gravity North -annotate +0+160 "Its Already When." -font DejaVu-Sans -pointsize 38 -fill '#8b949e' -gravity North -annotate +0+280 "Cybersecurity news for people who know how this ends." assets/og-image.png
 
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
