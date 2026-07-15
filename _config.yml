@@ -1,8 +1,10 @@
-title: "It's Already When."
+﻿title: "It's Already When."
 tagline: "Cybersecurity news for people who know how this ends."
 description: "Weekly cybersecurity intelligence, plainly explained."
 url: "https://bizzal70.github.io"
 baseurl: "/itsalreadywhen"
+
+image: /itsalreadywhen/assets/og-image.png
 
 author:
   name: "The Analyst"
