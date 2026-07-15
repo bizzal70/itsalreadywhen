@@ -19,7 +19,7 @@
   framework_url: https://www.cisecurity.org/controls/cis-controls-list
   angle: Collection is not detection — the difference between compliance logging and
     operational logging
-  used: false
+  used: true
 - topic: Third-Party and Vendor Risk Management
   framework: NIST Cybersecurity Framework — Supply Chain Risk Management (GV.SC)
   framework_url: https://www.nist.gov/cyberframework
