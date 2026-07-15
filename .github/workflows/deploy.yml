@@ -26,6 +26,7 @@ jobs:
 
       - name: Generate OG image
         run: |
+          sudo apt-get install -y imagemagick
           mkdir -p assets
           convert -size 1200x630 xc:'#0d1117' -fill '#e05252' -draw "rectangle 0,580 1200,630" -font DejaVu-Sans-Bold -pointsize 80 -fill '#e05252' -gravity North -annotate +0+160 "Its Already When." -font DejaVu-Sans -pointsize 38 -fill '#8b949e' -gravity North -annotate +0+280 "Cybersecurity news for people who know how this ends." assets/og-image.png
 
