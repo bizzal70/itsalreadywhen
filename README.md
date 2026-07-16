@@ -57,9 +57,9 @@ Everything runs on GitHub Actions. No local machine, server, or cron required.
 | `daily-scrape.yml` | 6:00am MT daily | Pulls 13 RSS feeds, deduplicates by URL hash, caches to `articles.db` |
 | `daily-field-note.yml` | 6:30am MT daily | Generates a Field Note if anything is high-signal; pushes it; tweets with card |
 | `weekly-digest.yml` | Sunday 8am MT | Catches up missed articles; generates the Issue with Claude; pushes; tweets with card |
-| `weekly-rtfm.yml` | Wednesday 8am MT | Picks next RTFM topic; generates article; pushes; tweets |
+| `weekly-rtfm.yml` | Wednesday 8am MT | Picks next RTFM topic; generates article; pushes; tweets with card |
 | `deploy.yml` | On every push to `main` | Builds + deploys Jekyll site to GitHub Pages |
-| `tweet-latest-rtfm.yml` | Manual | Tweets the most recent RTFM article (use if tweet step missed a publish) |
+| `tweet-latest-rtfm.yml` | Manual | Tweets the most recent RTFM article with card (use if tweet step missed a publish) |
 | `fix-tweet.yml` | Manual | Reposts a corrected tweet for a given Issue number |
 
 All scheduled workflows support `workflow_dispatch` for manual runs. Publish workflows skip the tweet silently if nothing new was generated.
@@ -79,8 +79,8 @@ All scheduled workflows support `workflow_dispatch` for manual runs. Publish wor
 | `scraper/rtfm_topics.yml` | RTFM topic backlog. Each entry cites a stable, hand-verified framework URL. Entries are marked `used: true` after publishing |
 | `scraper/x_thumbnail.py` | Generates 1200×675 X card image (Pillow) from post front matter: dark theme, red accent, blog name + issue + summary |
 | `scraper/post_to_x.py` | Tweets weekly Issue announcement with thumbnail card attached |
-| `scraper/post_field_note_to_x.py` | Tweets Field Note announcement |
-| `scraper/post_rtfm_to_x.py` | Tweets RTFM announcement |
+| `scraper/post_field_note_to_x.py` | Tweets Field Note announcement with thumbnail card attached |
+| `scraper/post_rtfm_to_x.py` | Tweets RTFM announcement with thumbnail card attached |
 
 ---
 
@@ -94,7 +94,9 @@ Each section uses a distinct two-tag pairing. X suppresses reach above ~3 tags p
 | Field Notes | `#CyberSecurity #BlueTeam` | Defenders who act on tactical content |
 | RTFM | `#CyberSecurity #CISO` | Leadership and compliance audience |
 
-Every Issue tweet includes a generated 1200×675 card image: dark background, red accent, issue number and summary pulled from post front matter.
+**Every** tweet — Issue, Field Note, and RTFM — includes a generated 1200×675 card image: dark background, red accent, issue number and summary pulled from post front matter. Field Notes and RTFM entries have no issue number, so their cards read `ISSUE #?` (the same as the sister blogs' Field Note and RTFM cards).
+
+Card generation and media upload are each wrapped in try/except: if either fails, the tweet still posts, just without the image.
 
 ---
 
