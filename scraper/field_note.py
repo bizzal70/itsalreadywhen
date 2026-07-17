@@ -13,7 +13,7 @@ from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 from pathlib import Path
 import anthropic
-from resources import build_resources_section, insert_before_signoff
+from resources import build_resources_section, insert_before_signoff, build_related_section
 from scraper import init_db
 
 DB_PATH = Path(__file__).parent / "articles.db"
@@ -95,7 +95,11 @@ summary: "{safe_summary}"
         "[@itsalreadywhen](https://x.com/itsalreadywhen) or subscribe via RSS.*"
     )
     NOTES_DIR.mkdir(exist_ok=True)
-    filename.write_text(frontmatter + content + cta, encoding="utf-8")
+    related = build_related_section(NOTES_DIR.parent, filename.name)
+    filename.write_text(
+        frontmatter + content + ("\n\n" + related if related else "") + cta,
+        encoding="utf-8",
+    )
     print(f"Field Note written: {filename}")
     return filename
 

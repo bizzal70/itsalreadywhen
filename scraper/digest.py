@@ -14,7 +14,7 @@ import subprocess
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 import anthropic
-from resources import build_resources_section, insert_before_signoff
+from resources import build_resources_section, insert_before_signoff, build_related_section
 
 DB_PATH = Path(__file__).parent / "articles.db"
 POSTS_DIR = Path(__file__).parent.parent / "_posts"
@@ -125,7 +125,12 @@ summary: "{safe_summary}"
 ---
 
 """
-    filename.write_text(frontmatter + kicker + "\n\n" + content + cta, encoding="utf-8")
+    related = build_related_section(POSTS_DIR.parent, filename.name)
+    filename.write_text(
+        frontmatter + kicker + "\n\n" + content
+        + ("\n\n" + related if related else "") + cta,
+        encoding="utf-8",
+    )
     print(f"Post written: {filename}")
     return filename
 
