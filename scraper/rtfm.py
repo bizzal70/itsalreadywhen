@@ -17,6 +17,7 @@ import yaml
 from datetime import datetime
 from pathlib import Path
 import anthropic
+from resources import build_related_section
 
 TOPICS_PATH = Path(__file__).parent / "rtfm_topics.yml"
 RTFM_DIR = Path(__file__).parent.parent / "_rtfm"
@@ -84,7 +85,11 @@ framework_url: "{topic['framework_url']}"
 
 """
     RTFM_DIR.mkdir(exist_ok=True)
-    filename.write_text(frontmatter + content, encoding="utf-8")
+    related = build_related_section(RTFM_DIR.parent, filename.name)
+    filename.write_text(
+        frontmatter + content + ("\n\n" + related if related else ""),
+        encoding="utf-8",
+    )
     print(f"RTFM post written: {filename}")
     return filename
 
