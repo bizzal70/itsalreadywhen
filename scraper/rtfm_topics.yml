@@ -24,7 +24,7 @@
   framework: NIST Cybersecurity Framework — Supply Chain Risk Management (GV.SC)
   framework_url: https://www.nist.gov/cyberframework
   angle: Your security posture is the average of every vendor you trust
-  used: false
+  used: true
 - topic: Segmentation as an Assumption, Not a Diagram
   framework: NIST SP 800-207 — Zero Trust Architecture
   framework_url: https://csrc.nist.gov/pubs/sp/800/207/final
