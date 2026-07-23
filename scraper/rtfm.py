@@ -1,8 +1,8 @@
 """
-Weekly RTFM generator — picks the next unused topic from rtfm_topics.yml,
+Weekly RTFM generator â€” picks the next unused topic from rtfm_topics.yml,
 sends to Claude API, writes a long-form Jekyll post to _rtfm/.
 
-Deliberately NOT sourced from the article database — RTFM is reference-grounded,
+Deliberately NOT sourced from the article database â€” RTFM is reference-grounded,
 evergreen best-practice content, distinct in tone and sourcing from Issues
 and Field Notes. No current-events tie-in by design.
 
@@ -41,30 +41,30 @@ def next_topic(topics):
 
 
 def build_prompt(topic):
-    return f"""You are the anonymous author of "It's Already When." — a cybersecurity publication. This piece is for "RTFM": a weekly long-form, technical, reference-grounded article. It is deliberately NOT news-driven and should not reference recent breaches, CVEs, or current events — that's what the Issues and Field Notes sections are for. RTFM is the field manual: durable, technical, best-practice writing about things security practitioners already know they should do and routinely don't.
+    return f"""You are the anonymous author of "It's Already When." â€” a cybersecurity publication. This piece is for "RTFM": a weekly long-form, technical, reference-grounded article. It is deliberately NOT news-driven and should not reference recent breaches, CVEs, or current events â€” that's what the Issues and Field Notes sections are for. RTFM is the field manual: durable, technical, best-practice writing about things security practitioners already know they should do and routinely don't.
 
-Same voice as the rest of the publication: dry, world-weary, authoritative, allergic to hype and vendor PR. But this piece is longer-form and more technical/instructional than the news sections — closer to a respected practitioner's essay on first principles than a digest entry.
+Same voice as the rest of the publication: dry, world-weary, authoritative, allergic to hype and vendor PR. But this piece is longer-form and more technical/instructional than the news sections â€” closer to a respected practitioner's essay on first principles than a digest entry.
 
 Topic: {topic['topic']}
 Grounding framework: {topic['framework']}
 Angle: {topic['angle']}
 
-Write the article in Markdown with this structure. Do NOT include a top-level title or heading (no "# ..." line) — the page template already renders the title separately. Start directly with the opening paragraph.
-1. Open with a sharp, opinionated framing of the problem (2-4 sentences) — why this "obvious" thing is still ignored in practice
-2. ## The Standard — explain what the framework/control actually requires, in plain language, citing it by name
-3. ## Where It Breaks Down — the specific, concrete ways organizations fail to implement this in practice (be technical and specific, not generic)
-4. ## Doing It Right — concrete, actionable guidance a practitioner could actually implement
-5. ## The Bottom Line — a short closing section that ties it back to the publication's fatalistic voice
+Write the article in Markdown with this structure. Do NOT include a top-level title or heading (no "# ..." line) â€” the page template already renders the title separately. Start directly with the opening paragraph.
+1. Open with a sharp, opinionated framing of the problem (2-4 sentences) â€” why this "obvious" thing is still ignored in practice
+2. ## The Standard â€” explain what the framework/control actually requires, in plain language, citing it by name
+3. ## Where It Breaks Down â€” the specific, concrete ways organizations fail to implement this in practice (be technical and specific, not generic)
+4. ## Doing It Right â€” concrete, actionable guidance a practitioner could actually implement
+5. ## The Bottom Line â€” a short closing section that ties it back to the publication's fatalistic voice
 
 Rules:
-- Do not reference specific recent breaches, specific CVEs, or current news events — keep this evergreen
-- Be technical and specific — name protocols, configurations, tooling categories, not vague generalities
+- Do not reference specific recent breaches, specific CVEs, or current news events â€” keep this evergreen
+- Be technical and specific â€” name protocols, configurations, tooling categories, not vague generalities
 - 1000-1500 words
 - Do not mention that you used AI to write this
-- Do not use em dashes (—) anywhere in the text. Use periods, commas, or parentheses instead
+- Do not use em dashes (â€”) anywhere in the text. Use periods, commas, or parentheses instead
 - End with a single italicized sign-off line that fits the brand voice
 
-Also provide, on the very first line before the article content, a one-sentence summary (for the blog index) prefixed with "SUMMARY:" — this will be stripped from the post.
+Also provide, on the very first line before the article content, a one-sentence summary (for the blog index) prefixed with "SUMMARY:" â€” this will be stripped from the post.
 """
 
 
@@ -85,7 +85,7 @@ framework_url: "{topic['framework_url']}"
 
 """
     RTFM_DIR.mkdir(exist_ok=True)
-    related = build_related_section(RTFM_DIR.parent, filename.name)
+    related = build_related_section(RTFM_DIR.parent, filename.name, current_text=f"{topic} {content}")
     filename.write_text(
         frontmatter + content + ("\n\n" + related if related else ""),
         encoding="utf-8",
@@ -103,7 +103,7 @@ def git_push(filepaths):
         cwd=repo_root, check=True
     )
     subprocess.run(["git", "push"], cwd=repo_root, check=True)
-    print("Pushed to GitHub — GitHub Actions will deploy in ~60 seconds.")
+    print("Pushed to GitHub â€” GitHub Actions will deploy in ~60 seconds.")
 
 
 def main():
