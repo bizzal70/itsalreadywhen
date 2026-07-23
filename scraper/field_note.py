@@ -1,5 +1,5 @@
 """
-Daily Field Note generator — pulls today's highest-signal articles from SQLite,
+Daily Field Note generator â€” pulls today's highest-signal articles from SQLite,
 sends to Claude API, writes a short tactical Jekyll post to _field_notes/.
 
 Run: python field_note.py
@@ -46,9 +46,9 @@ def build_prompt(articles):
 
     articles_text = "\n---\n".join(lines)
 
-    return f"""You are the anonymous author of "It's Already When." — a cybersecurity digest. This is a "Field Note": a short, tactical daily entry, distinct from the weekly Issue. Same dry, world-weary, authoritative voice — but tighter and more operational, like a note scrawled between incidents rather than a full dossier.
+    return f"""You are the anonymous author of "It's Already When." â€” a cybersecurity digest. This is a "Field Note": a short, tactical daily entry, distinct from the weekly Issue. Same dry, world-weary, authoritative voice â€” but tighter and more operational, like a note scrawled between incidents rather than a full dossier.
 
-Below are today's cybersecurity articles. Pick the 1-3 highest-signal items (active exploitation, a CVE with a public PoC, a confirmed breach with real impact — skip vendor PR and low-signal noise). Write a Field Note in Markdown with exactly this structure:
+Below are today's cybersecurity articles. Pick the 1-3 highest-signal items (active exploitation, a CVE with a public PoC, a confirmed breach with real impact â€” skip vendor PR and low-signal noise). Write a Field Note in Markdown with exactly this structure:
 
 ## Today's Field Note
 One tight paragraph (3-5 sentences) in voice covering what happened and why it matters right now.
@@ -61,10 +61,10 @@ Rules:
 - No fear-mongering, no vendor PR language
 - Keep the whole thing under 300 words
 - Do not mention that you used AI to write this
-- Do not use em dashes (—) anywhere in the text. Use periods, commas, or parentheses instead
+- Do not use em dashes (â€”) anywhere in the text. Use periods, commas, or parentheses instead
 - End with a single italicized one-line sign-off that fits the brand voice
 
-Also provide, on the very first line before the content, a one-sentence summary (for the blog index) prefixed with "SUMMARY:" — this will be stripped from the post.
+Also provide, on the very first line before the content, a one-sentence summary (for the blog index) prefixed with "SUMMARY:" â€” this will be stripped from the post.
 
 If nothing in today's articles is genuinely high-signal, write SUMMARY: SKIP and nothing else.
 
@@ -95,7 +95,7 @@ summary: "{safe_summary}"
         "[@itsalreadywhen](https://x.com/itsalreadywhen) or subscribe via RSS.*"
     )
     NOTES_DIR.mkdir(exist_ok=True)
-    related = build_related_section(NOTES_DIR.parent, filename.name)
+    related = build_related_section(NOTES_DIR.parent, filename.name, current_text=f"{title} {content}")
     filename.write_text(
         frontmatter + content + ("\n\n" + related if related else "") + cta,
         encoding="utf-8",
@@ -112,7 +112,7 @@ def git_push(filepath):
         cwd=repo_root, check=True
     )
     subprocess.run(["git", "push"], cwd=repo_root, check=True)
-    print("Pushed to GitHub — GitHub Actions will deploy in ~60 seconds.")
+    print("Pushed to GitHub â€” GitHub Actions will deploy in ~60 seconds.")
 
 
 def main():
@@ -160,7 +160,7 @@ def main():
     content = insert_before_signoff(content, build_resources_section(content, heading="## Resources"))
 
     today_fmt = datetime.now(MT).strftime("%B %d, %Y")
-    title = f"Field Note — {today_fmt}"
+    title = f"Field Note â€” {today_fmt}"
 
     filepath = write_note(title, summary, content)
 
