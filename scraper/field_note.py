@@ -12,9 +12,23 @@ import subprocess
 from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 from pathlib import Path
+import re
 import anthropic
 from resources import build_resources_section, insert_before_signoff, build_related_section
 from scraper import init_db
+from note_quality import assess
+
+# Concrete-specificity signals for a cyber Field Note: a CVE id or any number.
+_CONCRETE = re.compile(r"CVE-\d{4}-\d{4,7}|\b\d[\d.,]*\b")
+
+
+def _quality_problems(content: str) -> list:
+    """Deterministic substance floor: the two sections, enough substance, at
+    least one concrete ref, and no hedge-filler."""
+    return assess(content, min_words=90,
+                  require=["## Today's Field Note", "## Today's Action"],
+                  concrete_re=_CONCRETE, need_specifics=1)
+
 
 DB_PATH = Path(__file__).parent / "articles.db"
 NOTES_DIR = Path(__file__).parent.parent / "_field_notes"
@@ -156,6 +170,34 @@ def main():
     if summary == "SKIP" or not content:
         print("Nothing high-signal today. Skipping Field Note.")
         return
+
+    # Editorial substance floor: regenerate a thin/generic note once, stricter,
+    # and skip it rather than publish filler.
+    problems = _quality_problems(content)
+    if problems:
+        print(f"Field Note below the floor {problems}; regenerating once, stricter.")
+        strict = build_prompt(articles) + (
+            "\n\nYour previous draft fell short: " + "; ".join(problems) +
+            ". Rewrite it far more specific and tactical: name exact vendors, CVE "
+            "IDs, versions, and concrete defender actions. Keep both sections and "
+            "stay under 300 words.")
+        retry = client.messages.create(
+            model="claude-opus-4-8", max_tokens=800,
+            messages=[{"role": "user", "content": strict}])
+        raw2 = retry.content[0].text.strip()
+        s2, lines2 = "", []
+        for line in raw2.splitlines():
+            if line.startswith("SUMMARY:"):
+                s2 = line.replace("SUMMARY:", "").strip()
+            else:
+                lines2.append(line)
+        c2 = "\n".join(lines2).strip()
+        if c2 and s2 != "SKIP" and not _quality_problems(c2):
+            content, summary = c2, (s2 or summary)
+            print("  retry cleared the floor.")
+        else:
+            print("  retry still below the floor; skipping today's Field Note.")
+            return
 
     content = insert_before_signoff(content, build_resources_section(content, heading="## Resources"))
 
