@@ -1,5 +1,5 @@
 """
-Weekly digest generator — pulls this week's articles from SQLite,
+Weekly digest generator â€” pulls this week's articles from SQLite,
 sends to Claude API, writes a Jekyll post, and pushes to GitHub.
 
 Run: python digest.py
@@ -29,7 +29,7 @@ def get_issue_number():
     to the highest we find. This replaces the old ``issue_number.txt`` counter,
     which was never committed back by the CI workflow (it only staged
     ``_posts/``), so every run re-read the same stale value and republished the
-    same number — that is how issues #002, #003, and #004 all shipped as "002".
+    same number â€” that is how issues #002, #003, and #004 all shipped as "002".
     Deriving from the posts themselves is self-healing and can't desync.
     """
     highest = -1
@@ -67,25 +67,25 @@ def build_prompt(articles):
 
     articles_text = "\n---\n".join(lines)
 
-    return f"""You are the anonymous author of "It's Already When." — a weekly cybersecurity intelligence digest written for a general but informed audience. Your voice is dry, world-weary, and authoritative. You've been in the industry for decades. You have no patience for hype, vendor PR, or fear-mongering. You call things what they are.
+    return f"""You are the anonymous author of "It's Already When." â€” a weekly cybersecurity intelligence digest written for a general but informed audience. Your voice is dry, world-weary, and authoritative. You've been in the industry for decades. You have no patience for hype, vendor PR, or fear-mongering. You call things what they are.
 
 Below are this week's cybersecurity news articles and advisories. Write the weekly digest post in Markdown.
 
 Structure the post with these sections (use ## for section headers):
-1. **This Week's Verdict** — 2-3 sentence opening that captures the week's overall theme with your signature dry wit
-2. **The Breaches** — Notable incidents and what they reveal
-3. **Vulnerabilities Worth Your Attention** — CVEs and advisories that actually matter, with plain-English impact
-4. **Threat Actors & Campaigns** — Who's active, what they're doing
-5. **The Bigger Picture** — One or two trends or analysis points that connect the week's dots
-6. **Patch. Now.** — A short actionable list of the most critical things defenders should do this week
+1. **This Week's Verdict** â€” 2-3 sentence opening that captures the week's overall theme with your signature dry wit
+2. **The Breaches** â€” Notable incidents and what they reveal
+3. **Vulnerabilities Worth Your Attention** â€” CVEs and advisories that actually matter, with plain-English impact
+4. **Threat Actors & Campaigns** â€” Who's active, what they're doing
+5. **The Bigger Picture** â€” One or two trends or analysis points that connect the week's dots
+6. **Patch. Now.** â€” A short actionable list of the most critical things defenders should do this week
 
 Rules:
 - Write for someone who knows what a CVE is but doesn't need jargon for its own sake
-- Be specific — name the vendors, name the threat actors, name the CVE IDs
+- Be specific â€” name the vendors, name the threat actors, name the CVE IDs
 - No bullet-point soup. Mix prose and lists naturally
 - Keep it under 1200 words
 - Do not mention that you used AI to write this
-- Do not use em dashes (—) anywhere in the text. Use periods, commas, or parentheses instead
+- Do not use em dashes (â€”) anywhere in the text. Use periods, commas, or parentheses instead
 - End with a single italicized sign-off line that fits the brand voice
 
 Also provide, before the post content, these two lines (both will be stripped from the post):
@@ -109,8 +109,8 @@ def write_post(issue_number, headline, summary, content, week_label):
     # Promote the hook (headline, else summary) into the title; the issue number
     # and week move to a kicker line above the body. CTA lands after the sign-off.
     hook = (headline or summary).strip().strip('"').rstrip(".")
-    title = (hook or f"Issue #{issue_number:03d} — {week_label}").replace('"', "'")
-    kicker = f"*Issue #{issue_number:03d} · {week_label}*"
+    title = (hook or f"Issue #{issue_number:03d} â€” {week_label}").replace('"', "'")
+    kicker = f"*Issue #{issue_number:03d} Â· {week_label}*"
     cta = (
         "\n\n---\n\n*New Issue every week. Follow "
         "[@itsalreadywhen](https://x.com/itsalreadywhen) or subscribe via RSS "
@@ -125,7 +125,7 @@ summary: "{safe_summary}"
 ---
 
 """
-    related = build_related_section(POSTS_DIR.parent, filename.name)
+    related = build_related_section(POSTS_DIR.parent, filename.name, current_text=f"{headline} {content}")
     filename.write_text(
         frontmatter + kicker + "\n\n" + content
         + ("\n\n" + related if related else "") + cta,
@@ -143,7 +143,7 @@ def git_push(filepath):
         cwd=repo_root, check=True
     )
     subprocess.run(["git", "push"], cwd=repo_root, check=True)
-    print("Pushed to GitHub — GitHub Actions will deploy in ~60 seconds.")
+    print("Pushed to GitHub â€” GitHub Actions will deploy in ~60 seconds.")
 
 
 def main():
