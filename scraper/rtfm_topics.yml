@@ -29,7 +29,7 @@
   framework: NIST SP 800-207 — Zero Trust Architecture
   framework_url: https://csrc.nist.gov/pubs/sp/800/207/final
   angle: Flat networks survive audits and fail incidents
-  used: false
+  used: true
 - topic: Incident Response Plans Nobody Has Run
   framework: NIST SP 800-61 — Computer Security Incident Handling Guide
   framework_url: https://csrc.nist.gov/pubs/sp/800/61/r2/final
