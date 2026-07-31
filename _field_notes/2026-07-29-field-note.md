@@ -1,6 +1,6 @@
 ---
 layout: field_note
-title: "Field Note â€” July 29, 2026"
+title: "Field Note — July 29, 2026"
 date: 2026-07-29
 summary: "Active exploitation of a Check Point SmartConsole auth bypass (CVE-2026-16232) now has a public PoC, while coordinated OT intrusions hit Minnesota water utilities and Gitea/vBulletin ship critical RCE fixes."
 ---
