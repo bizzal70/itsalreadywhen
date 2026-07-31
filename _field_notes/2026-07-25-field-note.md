@@ -1,6 +1,6 @@
 ---
 layout: field_note
-title: "Field Note â€” July 25, 2026"
+title: "Field Note — July 25, 2026"
 date: 2026-07-25
 summary: "A public PoC for an authenticated RCE in self-managed GitLab lands the same day as an active hotel Wi-Fi DNS campaign harvesting Microsoft 365 credentials."
 ---
