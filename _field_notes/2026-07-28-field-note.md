@@ -1,6 +1,6 @@
 ---
 layout: field_note
-title: "Field Note â€” July 28, 2026"
+title: "Field Note — July 28, 2026"
 date: 2026-07-28
 summary: "Two maximum-severity flaws under active exploitation (Arista VeloCloud CVE-2026-16812 and an unpatched Fastjson RCE), plus a critical unauthenticated TeamCity bug with a fix already out."
 ---
