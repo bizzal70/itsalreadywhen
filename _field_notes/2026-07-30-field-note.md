@@ -1,6 +1,6 @@
 ---
 layout: field_note
-title: "Field Note â€” July 30, 2026"
+title: "Field Note — July 30, 2026"
 date: 2026-07-30
 summary: "Cisco FMC static-credential zero-day (CVE-2026-20316) is in CISA KEV, Russia's Void Blizzard is riding an OWA zero-day for persistent mailbox access, and 30-plus Minnesota water utilities got hit in a coordinated OT attack."
 ---
