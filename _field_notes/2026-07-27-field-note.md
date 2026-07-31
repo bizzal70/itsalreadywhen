@@ -1,6 +1,6 @@
 ---
 layout: field_note
-title: "Field Note â€” July 27, 2026"
+title: "Field Note — July 27, 2026"
 date: 2026-07-27
 summary: "A threat actor is hijacking public Wi-Fi captive portals to phish Microsoft 365 credentials from traveling staff, while healthcare breaches at DentaQuest and MCBS expose over 24 million people."
 ---
