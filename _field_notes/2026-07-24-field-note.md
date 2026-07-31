@@ -1,6 +1,6 @@
 ---
 layout: field_note
-title: "Field Note â€” July 24, 2026"
+title: "Field Note — July 24, 2026"
 date: 2026-07-24
 summary: "Russia's Laundry Bear exploited a Zimbra zero-click flaw to loot Western mailboxes, Redis shipped seven fixes after public authenticated RCE PoCs dropped, and NodeBB patched eight high-severity bugs with exploit code already live."
 ---
