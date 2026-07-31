@@ -1,6 +1,6 @@
 ---
 layout: field_note
-title: "Field Note â€” July 31, 2026"
+title: "Field Note — July 31, 2026"
 date: 2026-07-31
 summary: "Iran-linked actors hit 30-plus Minnesota water systems while unauthenticated RCE flaws land in TeamCity and VMware, both prime targets for the same playbook."
 ---
