@@ -1,6 +1,6 @@
 ---
 layout: field_note
-title: "Field Note â€” July 26, 2026"
+title: "Field Note — July 26, 2026"
 date: 2026-07-26
 summary: "The SourTrade malvertising campaign has browsers assemble malware in memory to dodge URL-based detection, while ClickFix cryptominer lures hit Steam forums."
 ---
