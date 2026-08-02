@@ -75,7 +75,7 @@ Write only the LinkedIn post. No preamble, no explanation."""
 
     message = client.messages.create(
         model="claude-opus-5",
-        max_tokens=1500,
+        max_tokens=4096,
         messages=[{"role": "user", "content": prompt}]
     )
     for block in message.content:
