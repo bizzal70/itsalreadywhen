@@ -78,7 +78,10 @@ Write only the LinkedIn post. No preamble, no explanation."""
         max_tokens=1500,
         messages=[{"role": "user", "content": prompt}]
     )
-    return message.content[0].text.strip()
+    for block in message.content:
+        if block.type == "text":
+            return block.text.strip()
+    raise RuntimeError(f"no text block in response (got types: {[b.type for b in message.content]})")
 
 
 def send_email(subject, body):
