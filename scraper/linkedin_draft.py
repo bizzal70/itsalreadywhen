@@ -74,9 +74,9 @@ The digest content:
 Write only the LinkedIn post. No preamble, no explanation."""
 
     message = client.messages.create(
-        model="claude-opus-4-8",
+        model="claude-opus-5",
         max_tokens=1500,
-        messages=[{{"role": "user", "content": prompt}}]
+        messages=[{"role": "user", "content": prompt}]
     )
     return message.content[0].text.strip()
 
