@@ -93,7 +93,11 @@ def send_email(subject, body):
     msg.attach(MIMEText(body, "plain", "utf-8"))
 
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-        server.login(GMAIL_USER, os.environ["GMAIL_APP_PASSWORD"])
+        # Strip a UTF-8 BOM (﻿) and surrounding whitespace -- the stored
+        # secret picked one up somewhere along the way, and SMTP AUTH requires
+        # pure ASCII.
+        app_password = os.environ["GMAIL_APP_PASSWORD"].strip().lstrip("﻿")
+        server.login(GMAIL_USER, app_password)
         server.sendmail(GMAIL_USER, GMAIL_USER, msg.as_string())
 
 
