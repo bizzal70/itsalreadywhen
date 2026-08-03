@@ -7,7 +7,6 @@ Requires env vars: X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_TOKEN_SECRE
 import os
 import glob
 import re
-import tempfile
 import tweepy
 from pathlib import Path
 
