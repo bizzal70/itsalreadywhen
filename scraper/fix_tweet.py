@@ -8,7 +8,6 @@ import os
 import re
 import sys
 import tweepy
-from pathlib import Path
 from post_to_x import parse_post, build_tweet, POSTS_DIR
 
 ISSUE_FRONTMATTER_RE = re.compile(r'^issue:\s*"?(\d+)"?\s*$', re.MULTILINE)
