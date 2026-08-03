@@ -26,7 +26,7 @@ Each section has its own index page, RSS feed, and X hashtag pairing.
 ```
 6:00 AM MT daily          6:30 AM MT daily         Sunday 8 AM MT           Wednesday 8 AM MT
 ─────────────────         ─────────────────         ──────────────           ─────────────────
-13 RSS feeds              Last 24h articles          Week's articles          Next unused topic
+12 RSS feeds              Last 24h articles          Week's articles          Next unused topic
       │                         │                         │                         │
       ▼                         ▼                         ▼                         ▼
   scraper.py              field_note.py              digest.py                  rtfm.py
@@ -54,7 +54,7 @@ Everything runs on GitHub Actions. No local machine, server, or cron required.
 
 | Workflow | Schedule | What it does |
 |---|---|---|
-| `daily-scrape.yml` | 6:00am MT daily | Pulls 13 RSS feeds, deduplicates by URL hash, caches to `articles.db` |
+| `daily-scrape.yml` | 6:00am MT daily | Pulls 12 RSS feeds, deduplicates by URL hash, caches to `articles.db` |
 | `daily-field-note.yml` | 6:30am MT daily | Generates a Field Note if anything is high-signal; pushes it; tweets with card |
 | `weekly-digest.yml` | Sunday 8am MT | Catches up missed articles; generates the Issue with Claude; pushes; tweets with card |
 | `weekly-rtfm.yml` | Wednesday 8am MT | Picks next RTFM topic; generates article; pushes; tweets with card |
@@ -70,10 +70,11 @@ All scheduled workflows support `workflow_dispatch` for manual runs. Publish wor
 
 | File | Purpose |
 |---|---|
-| `scraper/feeds.py` | 13 RSS sources: CISA, NVD, Krebs, Hacker News, Bleeping Computer, Dark Reading, SecurityWeek, Schneier, Recorded Future, Malwarebytes, Project Zero, US-CERT |
+| `scraper/feeds.py` | 12 RSS sources: CISA Advisories, US-CERT, NVD CVEs, Krebs, Hacker News, Bleeping Computer, Dark Reading, SecurityWeek, Schneier, Recorded Future, Malwarebytes, Project Zero |
 | `scraper/scraper.py` | Pulls feeds, deduplicates, stores to `articles.db` |
 | `scraper/digest.py` | Generates weekly Issue from this week's unused articles via Claude API |
 | `scraper/field_note.py` | Generates daily Field Note from last 24h of unused articles; skips if nothing high-signal |
+| `scraper/note_quality.py` | Deterministic editorial substance floor for Field Notes: asserts word count / structure / concrete specifics. A thin note is regenerated once (stricter), then skipped — better a skipped day than a generic post |
 | `scraper/rtfm.py` | Picks next unused topic from `rtfm_topics.yml`; generates evergreen RTFM article |
 | `scraper/resources.py` | Builds deterministic NVD + SigmaHQ links for any CVE IDs in generated text — never LLM-generated URLs |
 | `scraper/rtfm_topics.yml` | RTFM topic backlog. Each entry cites a stable, hand-verified framework URL. Entries are marked `used: true` after publishing |
