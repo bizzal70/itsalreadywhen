@@ -38,13 +38,48 @@ def parse_post(path):
     return issue_num, summary_text, post_date, url
 
 
+# A small, low-risk set of topic keywords -> an extra, more specific hashtag.
+# Supplements (never replaces) the two static tags. X's ranking leans far more
+# on engagement velocity than hashtag matching, so this is a minor assist, not
+# a primary lever -- kept intentionally simple.
+_TOPIC_TAGS = [
+    ("ransomware", "#Ransomware"),
+    ("zero-day", "#ZeroDay"),
+    ("zero day", "#ZeroDay"),
+    ("breach", "#DataBreach"),
+    ("phishing", "#Phishing"),
+    ("supply chain", "#SupplyChain"),
+    ("malware", "#Malware"),
+    (" ai ", "#AISecurity"),
+    ("cloud", "#CloudSecurity"),
+    ("wallet", "#CryptoSecurity"),
+]
+
+
+def extract_topic_tag(text):
+    low = f" {text.lower()} "
+    for kw, tag in _TOPIC_TAGS:
+        if kw in low:
+            return tag
+    return None
+
+
 def build_tweet(issue_num, summary, url):
-    tweet = f"It's Already When. — Issue #{issue_num:03d}\n\n{summary}\n\n{url}\n\n#CyberSecurity #ThreatIntel"
-    if len(tweet) > 280:
-        overhead = len(f"It's Already When. — Issue #{issue_num:03d}\n\n\n\n{url}\n\n#CyberSecurity #ThreatIntel") + 3
+    """Two-part post: a link-free hook tweet (X's ranking suppresses reach on
+    posts with outbound links, and this account's tiny follower count means
+    nearly all views come from algorithmic distribution, not the timeline) plus
+    a reply carrying the link. Leads with the actual hook instead of a brand+
+    issue-number prefix, which used to burn the pre-"Show more" preview text
+    on branding rather than the scroll-stopping content."""
+    topic_tag = extract_topic_tag(summary)
+    tags = "#CyberSecurity #ThreatIntel" + (f" {topic_tag}" if topic_tag else "")
+    main = f"{summary}\n\n{tags}"
+    if len(main) > 280:
+        overhead = len(f"\n\n{tags}") + 3
         summary = summary[: max(0, 280 - overhead)] + "..."
-        tweet = f"It's Already When. — Issue #{issue_num:03d}\n\n{summary}\n\n{url}\n\n#CyberSecurity #ThreatIntel"
-    return tweet
+        main = f"{summary}\n\n{tags}"
+    reply = f"Full breakdown (Issue #{issue_num:03d}): {url}"
+    return main, reply
 
 
 def main():
@@ -59,7 +94,7 @@ def main():
         return
 
     issue_num, summary, post_date, url = parse_post(post_path)
-    tweet = build_tweet(issue_num, summary, url)
+    tweet, reply_tweet = build_tweet(issue_num, summary, url)
 
     # Build thumbnail
     thumb_path = None
@@ -95,7 +130,12 @@ def main():
     if media_ids:
         kwargs["media_ids"] = media_ids
     response = client.create_tweet(**kwargs)
-    print(f"Tweet posted: https://x.com/itsalreadywhen/status/{response.data['id']}")
+    tweet_id = response.data["id"]
+    print(f"Tweet posted: https://x.com/itsalreadywhen/status/{tweet_id}")
+
+    print(f"Posting link reply:\n{reply_tweet}\n")
+    reply_response = client.create_tweet(text=reply_tweet, in_reply_to_tweet_id=tweet_id)
+    print(f"Reply posted: https://x.com/itsalreadywhen/status/{reply_response.data['id']}")
 
     # Clean up temp file
     if thumb_path:
