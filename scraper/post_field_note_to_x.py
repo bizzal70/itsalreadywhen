@@ -33,14 +33,43 @@ def parse_note(path):
     return summary_text, url
 
 
+# A small, low-risk set of topic keywords -> an extra, more specific hashtag.
+# Supplements (never replaces) the two static tags. Kept intentionally simple.
+_TOPIC_TAGS = [
+    ("ransomware", "#Ransomware"),
+    ("zero-day", "#ZeroDay"),
+    ("zero day", "#ZeroDay"),
+    ("breach", "#DataBreach"),
+    ("phishing", "#Phishing"),
+    ("supply chain", "#SupplyChain"),
+    ("malware", "#Malware"),
+    (" ai ", "#AISecurity"),
+    ("cloud", "#CloudSecurity"),
+    ("wallet", "#CryptoSecurity"),
+]
+
+
+def extract_topic_tag(text):
+    low = f" {text.lower()} "
+    for kw, tag in _TOPIC_TAGS:
+        if kw in low:
+            return tag
+    return None
+
+
 def build_tweet(summary, url):
-    header = "It's Already When. — Field Note"
-    tweet = f"{header}\n\n{summary}\n\n{url}\n\n#CyberSecurity #BlueTeam"
-    if len(tweet) > 280:
-        max_summary = 280 - len(f"{header}\n\n\n\n{url}\n\n#CyberSecurity #BlueTeam") - 3
-        summary = summary[:max_summary] + "..."
-        tweet = f"{header}\n\n{summary}\n\n{url}\n\n#CyberSecurity #BlueTeam"
-    return tweet
+    """Two-part post: a link-free hook tweet (X's ranking suppresses reach on
+    posts with outbound links) plus a reply carrying the link. Leads with the
+    hook directly instead of a brand+type prefix eating the preview text."""
+    topic_tag = extract_topic_tag(summary)
+    tags = "#CyberSecurity #BlueTeam" + (f" {topic_tag}" if topic_tag else "")
+    main = f"{summary}\n\n{tags}"
+    if len(main) > 280:
+        overhead = len(f"\n\n{tags}") + 3
+        summary = summary[: max(0, 280 - overhead)] + "..."
+        main = f"{summary}\n\n{tags}"
+    reply = f"Full field note: {url}"
+    return main, reply
 
 
 def main():
@@ -55,7 +84,7 @@ def main():
         return
 
     summary, url = parse_note(note_path)
-    tweet = build_tweet(summary, url)
+    tweet, reply_tweet = build_tweet(summary, url)
 
     # Build thumbnail (same card Priced/Written attach; field notes have no issue
     # number, so the card renders "ISSUE #?" exactly as those blogs' cards do).
@@ -92,7 +121,12 @@ def main():
     if media_ids:
         kwargs["media_ids"] = media_ids
     response = client.create_tweet(**kwargs)
-    print(f"Tweet posted: https://x.com/itsalreadywhen/status/{response.data['id']}")
+    tweet_id = response.data["id"]
+    print(f"Tweet posted: https://x.com/itsalreadywhen/status/{tweet_id}")
+
+    print(f"Posting link reply:\n{reply_tweet}\n")
+    reply_response = client.create_tweet(text=reply_tweet, in_reply_to_tweet_id=tweet_id)
+    print(f"Reply posted: https://x.com/itsalreadywhen/status/{reply_response.data['id']}")
 
 
 if __name__ == "__main__":
