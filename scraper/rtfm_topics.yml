@@ -34,7 +34,7 @@
   framework: NIST SP 800-61 — Computer Security Incident Handling Guide
   framework_url: https://csrc.nist.gov/pubs/sp/800/61/r2/final
   angle: A plan that's never been tabletop-tested is a document, not a capability
-  used: false
+  used: true
 - topic: Backup Integrity vs. Backup Existence
   framework: NIST Cybersecurity Framework — Recover (RC.RP)
   framework_url: https://www.nist.gov/cyberframework
