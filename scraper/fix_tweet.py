@@ -37,7 +37,7 @@ def main():
         return
 
     issue_num, summary, post_date, url = parse_post(post_path)
-    tweet = build_tweet(issue_num, summary, url)
+    tweet, reply_tweet = build_tweet(issue_num, summary, url)
 
     client = tweepy.Client(
         consumer_key=os.environ["X_API_KEY"],
@@ -48,7 +48,12 @@ def main():
 
     print(f"Posting corrected tweet:\n{tweet}\n")
     response = client.create_tweet(text=tweet)
-    print(f"Posted: https://x.com/itsalreadywhen/status/{response.data['id']}")
+    tweet_id = response.data["id"]
+    print(f"Posted: https://x.com/itsalreadywhen/status/{tweet_id}")
+
+    print(f"Posting link reply:\n{reply_tweet}\n")
+    reply_response = client.create_tweet(text=reply_tweet, in_reply_to_tweet_id=tweet_id)
+    print(f"Reply posted: https://x.com/itsalreadywhen/status/{reply_response.data['id']}")
 
 
 if __name__ == "__main__":
