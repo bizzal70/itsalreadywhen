@@ -40,7 +40,7 @@
   framework_url: https://www.nist.gov/cyberframework
   angle: Having backups and having backups that restore are different claims, and
     ransomware crews know the gap
-  used: false
+  used: true
 - topic: Default Credentials and Configuration Drift
   framework: CIS Critical Security Control 4 — Secure Configuration Management
   framework_url: https://www.cisecurity.org/controls/cis-controls-list
