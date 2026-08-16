@@ -41,8 +41,16 @@ jobs:
             echo "published=false" >> "$GITHUB_OUTPUT"
           else
             git commit -m "RTFM $(date +'%Y-%m-%d')"
-            git push
-            echo "published=true" >> "$GITHUB_OUTPUT"
+            published=false
+            for attempt in 1 2 3 4 5; do
+              if git pull --rebase --autostash origin main && git push; then
+                published=true; break
+              fi
+              echo "push attempt $attempt hit a concurrent update on main; re-fetching..."
+              sleep $((attempt * 5))
+            done
+            echo "published=$published" >> "$GITHUB_OUTPUT"
+            if [ "$published" != "true" ]; then echo "::error::push to main failed after 5 attempts"; exit 1; fi
           fi
 
       - name: Wait for page to go live
