@@ -45,7 +45,7 @@
   framework: CIS Critical Security Control 4 — Secure Configuration Management
   framework_url: https://www.cisecurity.org/controls/cis-controls-list
   angle: The 'admin/admin' problem never goes away, it just moves to new infrastructure
-  used: false
+  used: true
 - topic: 'The Human Factor: Security Awareness That Isn''t Theater'
   framework: CIS Critical Security Control 14 — Security Awareness and Skills Training
   framework_url: https://www.cisecurity.org/controls/cis-controls-list
