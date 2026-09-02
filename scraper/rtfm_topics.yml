@@ -57,7 +57,7 @@
     Assets
   framework_url: https://www.cisecurity.org/controls/cis-controls-list
   angle: Shadow IT, forgotten subdomains, and the server nobody remembers provisioning
-  used: false
+  used: true
 - topic: 'Application Security Basics: Input Validation Still Matters'
   framework: OWASP Top 10
   framework_url: https://owasp.org/www-project-top-ten/
