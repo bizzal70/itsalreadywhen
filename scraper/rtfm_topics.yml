@@ -62,7 +62,7 @@
   framework: OWASP Top 10
   framework_url: https://owasp.org/www-project-top-ten/
   angle: Injection flaws are decades old and still near the top of every list — why
-  used: false
+  used: true
 - topic: Detection Engineering Over Alert Fatigue
   framework: MITRE ATT&CK
   framework_url: https://attack.mitre.org/
