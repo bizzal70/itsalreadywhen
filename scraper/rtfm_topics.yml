@@ -67,7 +67,7 @@
   framework: MITRE ATT&CK
   framework_url: https://attack.mitre.org/
   angle: A SIEM full of noise is functionally the same as no SIEM
-  used: false
+  used: true
 - topic: Identity Is the New Perimeter
   framework: NIST SP 800-207 — Zero Trust Architecture
   framework_url: https://csrc.nist.gov/pubs/sp/800/207/final
