@@ -72,7 +72,7 @@
   framework: NIST SP 800-207 — Zero Trust Architecture
   framework_url: https://csrc.nist.gov/pubs/sp/800/207/final
   angle: Firewalls protected a network that doesn't exist anymore
-  used: false
+  used: true
 - topic: Secure by Design vs. Secure by Bolt-On
   framework: CISA Secure by Design
   framework_url: https://www.cisa.gov/securebydesign
