@@ -78,7 +78,7 @@
   framework_url: https://www.cisa.gov/securebydesign
   angle: Why retrofitted security controls cost more and catch less than designed-in
     ones
-  used: false
+  used: true
 - topic: Change Management as a Security Control
   framework: NIST SP 800-53 Rev. 5 — CM Family (Configuration Management)
   framework_url: https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final
