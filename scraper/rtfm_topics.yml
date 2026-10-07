@@ -83,7 +83,7 @@
   framework: NIST SP 800-53 Rev. 5 — CM Family (Configuration Management)
   framework_url: https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final
   angle: Most outages and most breaches trace back to an unreviewed change
-  used: false
+  used: true
 - topic: Data Classification Before Data Protection
   framework: NIST Cybersecurity Framework — Identify (ID.AM)
   framework_url: https://www.nist.gov/cyberframework
