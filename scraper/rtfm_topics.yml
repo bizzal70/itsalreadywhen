@@ -88,7 +88,7 @@
   framework: NIST Cybersecurity Framework — Identify (ID.AM)
   framework_url: https://www.nist.gov/cyberframework
   angle: You can't apply the right controls to data you haven't bothered to label
-  used: false
+  used: true
 - topic: Encryption in Transit and at Rest — Where Programs Still Skip It
   framework: NIST SP 800-53 Rev. 5 — SC Family (System and Communications Protection)
   framework_url: https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final
