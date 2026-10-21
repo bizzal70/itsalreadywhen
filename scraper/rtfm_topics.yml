@@ -93,7 +93,7 @@
   framework: NIST SP 800-53 Rev. 5 — SC Family (System and Communications Protection)
   framework_url: https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final
   angle: Internal traffic and 'trusted' networks are where encryption quietly stops
-  used: false
+  used: true
 - topic: Privileged Access Management Beyond the Vault
   framework: CIS Critical Security Control 5 — Account Management
   framework_url: https://www.cisecurity.org/controls/cis-controls-list
