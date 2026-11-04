@@ -103,4 +103,4 @@
   framework: NIST SP 800-84 — Guide to Test, Training, and Exercise Programs
   framework_url: https://csrc.nist.gov/pubs/sp/800/84/final
   angle: The exercise should be uncomfortable, or it isn't testing anything
-  used: false
+  used: true
